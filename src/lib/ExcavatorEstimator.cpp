@@ -276,7 +276,8 @@ void ExcavatorEstimator::gnssCallback_(const sensor_msgs::NavSatFix::ConstPtr& l
 
 void ExcavatorEstimator::positionCallback_(const geometry_msgs::PointStamped::ConstPtr& LeicaPositionPtr) {
   // Static method variables
-  REGULAR_COUT << " Position callback." << std::endl;
+  //REGULAR_COUT << " Position callback." << std::endl;
+  
   static Eigen::Vector3d zeroCoord(0.0, 0.0, 0.0);
 
   static bool gnssHeadingHealthyFlag__ = true;
