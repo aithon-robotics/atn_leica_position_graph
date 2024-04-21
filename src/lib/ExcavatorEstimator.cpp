@@ -20,7 +20,7 @@ Please see the LICENSE file that has been included as part of this package.
 namespace excavator_se {
 
 ExcavatorEstimator::ExcavatorEstimator(std::shared_ptr<ros::NodeHandle> privateNodePtr) : graph_msf::GraphMsfRos(privateNodePtr) {
-  std::cout << YELLOW_START << "ExcavatorEstimator" << GREEN_START << " Setting up." << COLOR_END << std::endl;
+  std::cout << YELLOW_START << "LeicaPositionEstimator" << GREEN_START << " Setting up." << COLOR_END << std::endl;
 
   // Configurations ----------------------------
   // Static Transforms
@@ -35,7 +35,7 @@ ExcavatorEstimator::ExcavatorEstimator(std::shared_ptr<ros::NodeHandle> privateN
     throw std::runtime_error("ExcavatorEstimator could not be initialized");
   }
 
-  std::cout << YELLOW_START << "ExcavatorEstimator" << GREEN_START << " Set up successfully." << COLOR_END << std::endl;
+  std::cout << YELLOW_START << "LeicaPositionEstimator" << GREEN_START << " Set up successfully." << COLOR_END << std::endl;
 }
 
 bool ExcavatorEstimator::setup() {
@@ -85,14 +85,11 @@ void ExcavatorEstimator::initializeSubscribers_(ros::NodeHandle& privateNode) {
     std::cout << YELLOW_START << "ExcavatorEstimator" << COLOR_END << " Initialized LiDAR Odometry subscriber." << std::endl;
   }
 
-  // GNSS
-  if (useLeftGnssFlag_ || useRightGnssFlag_) {
-    subGnssLeft_.subscribe(privateNode, "/gnss_topic_1", ROS_QUEUE_SIZE);
-    subGnssRight_.subscribe(privateNode, "/gnss_topic_2", ROS_QUEUE_SIZE);
-    gnssExactSyncPtr_.reset(
-        new message_filters::Synchronizer<GnssExactSyncPolicy>(GnssExactSyncPolicy(ROS_QUEUE_SIZE), subGnssLeft_, subGnssRight_));
-    gnssExactSyncPtr_->registerCallback(boost::bind(&ExcavatorEstimator::gnssCallback_, this, _1, _2));
-    std::cout << YELLOW_START << "FactorGraphFiltering" << COLOR_END << " Initialized Gnss subscriber (for both Gnss topics)." << std::endl;
+  // GNSS -- TM: Redirection to positionCallback_ for Leica Position
+  if (true) { // useLeftGnssFlag_ || useRightGnssFlag_
+    subPosition_ = privateNode.subscribe<geometry_msgs::PointStamped>(
+      "/gnss_topic_1", ROS_QUEUE_SIZE,  &ExcavatorEstimator::positionCallback_, this, ros::TransportHints().tcpNoDelay());
+    std::cout << YELLOW_START << "FactorGraphFiltering" << COLOR_END << " Initialized Psition subscriber (on Gnss_topic_1)." << std::endl;
   }
 }
 
@@ -273,6 +270,70 @@ void ExcavatorEstimator::gnssCallback_(const sensor_msgs::NavSatFix::ConstPtr& l
       addToPathMsg(measGnss_worldGnssRPathPtr_, staticTransformsPtr_->getWorldFrame(), rightGnssMsgPtr->header.stamp, W_t_W_GnssR,
                    graphConfigPtr_->imuBufferLength * 4);
       pubMeasWorldGnssRPath_.publish(measGnss_worldGnssRPathPtr_);
+    }
+  }
+}
+
+void ExcavatorEstimator::positionCallback_(const geometry_msgs::PointStamped::ConstPtr& LeicaPositionPtr) {
+  // Static method variables
+  REGULAR_COUT << " Position callback." << std::endl;
+  static Eigen::Vector3d zeroCoord(0.0, 0.0, 0.0);
+
+  static bool gnssHeadingHealthyFlag__ = true;
+  static bool leftGnssPositionHealthyFlag__ = true;
+  static bool rightGnssPositionHealthyFlag__ = true;
+
+  static int positionCallbackCounter__ = 0;
+
+  // Start
+  Eigen::Vector3d positionCoord = Eigen::Vector3d(LeicaPositionPtr->point.x, LeicaPositionPtr->point.y, LeicaPositionPtr->point.z);
+  Eigen::Vector3d positionCovarianceXYZ(0.001, 0.001, 0.001); // TODO: Set proper values
+
+  if (positionCallbackCounter__ == 0) {  // Only measurements at the beginning
+    positionCallbackCounter__++;
+    gnssHandlerPtr_->initHandler(positionCoord, zeroCoord);
+  }
+
+  // Convert to cartesian coordinates --> Needed for every ramaining step
+  double yaw_W_C = gnssHandlerPtr_->computeYaw(positionCoord, zeroCoord);
+
+  // State Machine
+  if (!areYawAndPositionInited() && areRollAndPitchInited()) {  // Try to initialize yaw and position if not done already
+    if (this->initYawAndPosition(yaw_W_C, positionCoord, staticTransformsPtr_->getWorldFrame(),
+                                 dynamic_cast<ExcavatorStaticTransforms*>(staticTransformsPtr_.get())->getCabinFrame(),
+                                 dynamic_cast<ExcavatorStaticTransforms*>(staticTransformsPtr_.get())->getLeftGnssFrame())) {
+      REGULAR_COUT << " Set yaw and position successfully." << std::endl;
+    } else {
+      REGULAR_COUT << " Could not set yaw and position." << std::endl;
+      }
+  } else {  // Already initialized --> add to graph
+    // Measurement type 1: GNSS Yaw ----------------------------------------------------
+    // Measurement type 2: Position ---------------------------------------------------- ROSTIMENOW_______!!!!!!
+    if (true) { // Always add position measurement
+      positionCovarianceXYZ = Eigen::Vector3d(std::max(positionCovarianceXYZ(0), gnssPositionUnaryNoise_),
+                                              std::max(positionCovarianceXYZ(1), gnssPositionUnaryNoise_),
+                                              std::max(positionCovarianceXYZ(2), gnssPositionUnaryNoise_));
+      graph_msf::UnaryMeasurementXD<Eigen::Vector3d, 3> meas_W_t_W_Position(
+        "Leica-Position", int(gnssRate_), ros::Time::now().toSec(), staticTransformsPtr_->getWorldFrame() + "_ENU",
+        dynamic_cast<ExcavatorStaticTransforms*>(staticTransformsPtr_.get())->getLeftGnssFrame(), positionCoord, positionCovarianceXYZ,
+        GNSS_POSITION_COVARIANCE_VIOLATION_THRESHOLD);
+      if (!this->addPositionMeasurement(meas_W_t_W_Position)) {
+        if (leftGnssPositionHealthyFlag__) {
+          REGULAR_COUT << RED_START << " Gnss left position measurement not added." << COLOR_END << std::endl;
+          leftGnssPositionHealthyFlag__ = false;
+        }
+      } else if (!leftGnssPositionHealthyFlag__) {
+        REGULAR_COUT << GREEN_START << " Gnss left position measurement returned." << COLOR_END << std::endl;
+        leftGnssPositionHealthyFlag__ = true;
+      }
+    }
+
+    // Visualizations ------------------------------------------------------------
+    // Left GNSS
+    if (true) {
+      addToPathMsg(measGnss_worldGnssLPathPtr_, staticTransformsPtr_->getWorldFrame(), LeicaPositionPtr->header.stamp, positionCoord,
+                   graphConfigPtr_->imuBufferLength * 4);
+      pubMeasWorldGnssLPath_.publish(measGnss_worldGnssLPathPtr_);
     }
   }
 }

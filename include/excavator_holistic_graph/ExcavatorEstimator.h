@@ -21,6 +21,9 @@ Please see the LICENSE file that has been included as part of this package.
 #include <sensor_msgs/NavSatFix.h>
 #include <tf/transform_listener.h>
 
+// Leica Position extension
+#include <geometry_msgs/PointStamped.h>
+
 // Workspace
 #include "excavator_holistic_graph/ExcavatorStaticTransforms.h"
 #include "graph_msf/gnss/GnssHandler.h"
@@ -55,6 +58,8 @@ class ExcavatorEstimator : public graph_msf::GraphMsfRos {
   // Callbacks
   void lidarOdometryCallback_(const nav_msgs::Odometry::ConstPtr& lidar_odom_ptr);
   void gnssCallback_(const sensor_msgs::NavSatFix::ConstPtr& leftGnssPtr, const sensor_msgs::NavSatFix::ConstPtr& rightGnssPtr);
+  void positionCallback_(const geometry_msgs::PointStamped::ConstPtr& leftGnssMsgPtr);
+
 
   // Publish State
   virtual void publishState_(
@@ -77,6 +82,8 @@ class ExcavatorEstimator : public graph_msf::GraphMsfRos {
   // Subscribers
   ros::Subscriber subImu_;
   ros::Subscriber subLidarOdometry_;
+  ros::Subscriber subPosition_;
+  
   message_filters::Subscriber<sensor_msgs::NavSatFix> subGnssLeft_;
   message_filters::Subscriber<sensor_msgs::NavSatFix> subGnssRight_;
   tf::TransformListener tfListener_;
