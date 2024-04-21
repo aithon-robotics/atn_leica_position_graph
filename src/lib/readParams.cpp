@@ -46,22 +46,6 @@ void ExcavatorEstimator::readParams_(const ros::NodeHandle& privateNode) {
   /// Gnss
   gnssPositionUnaryNoise_ = graph_msf::tryGetParam<double>("noise_params/gnssPositionUnaryNoise", privateNode);
   gnssHeadingUnaryNoise_ = graph_msf::tryGetParam<double>("noise_params/gnssHeadingUnaryNoise", privateNode);
-
-  // Launch Parameters
-  /// LiDAR Odometry
-  useLioOdometryFlag_ = graph_msf::tryGetParam<bool>("launch/useLioOdometry", privateNode);
-  useLeftGnssFlag_ = graph_msf::tryGetParam<bool>("launch/useLeftGnss", privateNode);
-  useRightGnssFlag_ = graph_msf::tryGetParam<bool>("launch/useRightGnss", privateNode);
-
-  // GNSS Parameters
-  if (useLeftGnssFlag_ || useRightGnssFlag_) {
-    // Gnss parameters
-    gnssHandlerPtr_->usingGnssReferenceFlag = graph_msf::tryGetParam<bool>("gnss/useGnssReference", privateNode);
-    gnssHandlerPtr_->setGnssReferenceLatitude(graph_msf::tryGetParam<double>("gnss/referenceLatitude", privateNode));
-    gnssHandlerPtr_->setGnssReferenceLongitude(graph_msf::tryGetParam<double>("gnss/referenceLongitude", privateNode));
-    gnssHandlerPtr_->setGnssReferenceAltitude(graph_msf::tryGetParam<double>("gnss/referenceAltitude", privateNode));
-    gnssHandlerPtr_->setGnssReferenceHeading(graph_msf::tryGetParam<double>("gnss/referenceHeading", privateNode));
-  }
 }
 
 }  // namespace excavator_se

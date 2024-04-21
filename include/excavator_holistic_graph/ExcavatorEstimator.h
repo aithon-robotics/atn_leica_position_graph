@@ -56,8 +56,6 @@ class ExcavatorEstimator : public graph_msf::GraphMsfRos {
   void readParams_(const ros::NodeHandle& privateNode) override;
 
   // Callbacks
-  void lidarOdometryCallback_(const nav_msgs::Odometry::ConstPtr& lidar_odom_ptr);
-  void gnssCallback_(const sensor_msgs::NavSatFix::ConstPtr& leftGnssPtr, const sensor_msgs::NavSatFix::ConstPtr& rightGnssPtr);
   void positionCallback_(const geometry_msgs::PointStamped::ConstPtr& leftGnssMsgPtr);
 
 
@@ -69,28 +67,17 @@ class ExcavatorEstimator : public graph_msf::GraphMsfRos {
   // Members ----------------------------------
   // Publishers
   // Path
-  ros::Publisher pubMeasMapLioPath_;
-  ros::Publisher pubMeasWorldGnssLPath_;
-  ros::Publisher pubMeasWorldGnssRPath_;
+  ros::Publisher pubMeasWorldPositionPath_;
 
   // Messages
   // Paths
-  nav_msgs::PathPtr measLio_mapImuPathPtr_;
-  nav_msgs::PathPtr measGnss_worldGnssLPathPtr_;
-  nav_msgs::PathPtr measGnss_worldGnssRPathPtr_;
+  nav_msgs::PathPtr measGnss_worldPositionPathPtr_;
 
   // Subscribers
   ros::Subscriber subImu_;
-  ros::Subscriber subLidarOdometry_;
   ros::Subscriber subPosition_;
   
-  message_filters::Subscriber<sensor_msgs::NavSatFix> subGnssLeft_;
-  message_filters::Subscriber<sensor_msgs::NavSatFix> subGnssRight_;
   tf::TransformListener tfListener_;
-
-  // GNSS Sync Policy
-  typedef message_filters::sync_policies::ExactTime<sensor_msgs::NavSatFix, sensor_msgs::NavSatFix> GnssExactSyncPolicy;
-  boost::shared_ptr<message_filters::Synchronizer<GnssExactSyncPolicy>> gnssExactSyncPtr_;  // ROS Exact Sync Policy Message Filter
 
   // Time
   std::chrono::time_point<std::chrono::high_resolution_clock> startTime_;
@@ -109,10 +96,7 @@ class ExcavatorEstimator : public graph_msf::GraphMsfRos {
   double gnssHeadingUnaryNoise_ = 1.0;   // in [rad]
 
   /// Flags
-  bool useLioOdometryFlag_ = true;
-  bool useLeftGnssFlag_ = true;
-  bool useRightGnssFlag_ = true;
-  bool useGnssYawFlag_ = true;
+
 };
 }  // namespace excavator_se
 #endif  // end EXCAVATOR_ESTIMATOR_H
