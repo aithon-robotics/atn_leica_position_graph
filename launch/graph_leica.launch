@@ -18,4 +18,7 @@
     <!-- Graph -->
     <include file="$(find leica_position_graph)/launch/graph_no_urdf.launch" pass_all_args="true"/>
 
+    <!-- Static TF Publisher -->
+    <node pkg="tf2_ros" type="static_transform_publisher" name="atnj1_to_prism_tf_publisher" args="0.05513 -0.01502 -0.1503 1.5708 0 0 atnj1 Prism" />
+
 </launch>
