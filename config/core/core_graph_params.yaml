@@ -1,6 +1,6 @@
 # Sensor Params
 sensor_params:
-  imuRate: 100.0                          # Rate of IMU input (Hz)
+  imuRate: 200.0                          # Rate of IMU input (Hz)
   useImuSignalLowPassFilter: false        # If true, a low pass filter is applied to the IMU measurements
   imuLowPassFilterCutoffFreq: 30.0        # Cutoff frequency of the low pass filter
   imuBufferLength: 400
