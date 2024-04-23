@@ -58,17 +58,6 @@ void ExcavatorStaticTransforms::findTransformations() {
   // Cabin_I
   lv_T_frame1_frame2(baseLinkFrame_, imuFrame_) = rv_T_frame1_frame2(imuFrame_, baseLinkFrame_).inverse();
 
-  // Imu to LiDAR Link ---
-  std::cout << YELLOW_START << "StaticTransformsTf" << COLOR_END << " Waiting for transform for 10 seconds." << std::endl;
-  listener_.waitForTransform(imuFrame_, lidarFrame_, ros::Time(0), ros::Duration(1.0));
-  listener_.lookupTransform(imuFrame_, lidarFrame_, ros::Time(0), transform);
-  // I_Lidar
-  graph_msf::tfToIsometry3(tf::Transform(transform), lv_T_frame1_frame2(imuFrame_, lidarFrame_));
-  std::cout << YELLOW_START << "CompslamEstimator" << COLOR_END
-            << " Translation I_Lidar: " << rv_T_frame1_frame2(imuFrame_, lidarFrame_).translation() << std::endl;
-  // Lidar_I
-  lv_T_frame1_frame2(lidarFrame_, imuFrame_) = rv_T_frame1_frame2(imuFrame_, lidarFrame_).inverse();
-
   // Imu to GNSS Left Link ---
   listener_.waitForTransform(imuFrame_, leftGnssFrame_, ros::Time(0), ros::Duration(1.0));
   listener_.lookupTransform(imuFrame_, leftGnssFrame_, ros::Time(0), transform);
@@ -78,16 +67,6 @@ void ExcavatorStaticTransforms::findTransformations() {
             << " Translation I_GnssL: " << rv_T_frame1_frame2(imuFrame_, leftGnssFrame_).translation() << std::endl;
   // GnssL_I
   lv_T_frame1_frame2(leftGnssFrame_, imuFrame_) = rv_T_frame1_frame2(imuFrame_, leftGnssFrame_).inverse();
-
-  // Imu to GNSS Right Link ---
-  listener_.waitForTransform(imuFrame_, rightGnssFrame_, ros::Time(0), ros::Duration(1.0));
-  listener_.lookupTransform(imuFrame_, rightGnssFrame_, ros::Time(0), transform);
-  // I_GnssR
-  graph_msf::tfToIsometry3(tf::Transform(transform), lv_T_frame1_frame2(imuFrame_, rightGnssFrame_));
-  std::cout << YELLOW_START << "CompslamEstimator" << COLOR_END
-            << " Translation I_GnssR: " << rv_T_frame1_frame2(imuFrame_, rightGnssFrame_).translation() << std::endl;
-  // GnssL_I
-  lv_T_frame1_frame2(rightGnssFrame_, imuFrame_) = rv_T_frame1_frame2(imuFrame_, rightGnssFrame_).inverse();
 
   std::cout << YELLOW_START << "StaticTransformsTf" << GREEN_START << " Transforms looked up successfully." << COLOR_END << std::endl;
 }

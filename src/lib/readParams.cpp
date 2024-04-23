@@ -20,19 +20,12 @@ void ExcavatorEstimator::readParams_(const ros::NodeHandle& privateNode) {
   graph_msf::GraphMsfRos::readParams_(privateNode);
 
   // Set frames ----------------------------
-  /// LiDAR frame
-  std::string frame = graph_msf::tryGetParam<std::string>("extrinsics/lidarFrame", privateNode);
-  dynamic_cast<ExcavatorStaticTransforms*>(staticTransformsPtr_.get())->setLioOdometryFrame(frame);
   /// Cabin frame
-  frame = graph_msf::tryGetParam<std::string>("extrinsics/cabinFrame", privateNode);
+  std::string frame = graph_msf::tryGetParam<std::string>("extrinsics/cabinFrame", privateNode);
   dynamic_cast<ExcavatorStaticTransforms*>(staticTransformsPtr_.get())->setCabinFrame(frame);
   /// Left Gnss frame
   frame = graph_msf::tryGetParam<std::string>("extrinsics/gnssFrame1", privateNode);
   dynamic_cast<ExcavatorStaticTransforms*>(staticTransformsPtr_.get())->setLeftGnssFrame(frame);
-  /// Right Gnss frame
-  frame = graph_msf::tryGetParam<std::string>("extrinsics/gnssFrame2", privateNode);
-  dynamic_cast<ExcavatorStaticTransforms*>(staticTransformsPtr_.get())->setRightGnssFrame(frame);
-
   // Sensor Parameters ----------------------------
   lioOdometryRate_ = graph_msf::tryGetParam<double>("sensor_params/lioOdometryRate", privateNode);
   gnssRate_ = graph_msf::tryGetParam<double>("sensor_params/gnssRate", privateNode);
