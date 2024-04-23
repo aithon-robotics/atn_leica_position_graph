@@ -18,15 +18,11 @@ class ExcavatorStaticTransforms : public graph_msf::StaticTransformsTf {
                             const graph_msf::StaticTransforms& staticTransforms = graph_msf::StaticTransforms());
 
   // Setters ---------------------------------------------------------------
-  void setLioOdometryFrame(const std::string& s) { lidarFrame_ = s; }
   void setLeftGnssFrame(const std::string& s) { leftGnssFrame_ = s; }
-  void setRightGnssFrame(const std::string& s) { rightGnssFrame_ = s; }
   void setCabinFrame(const std::string& s) { cabinFrame_ = s; }
 
   // Getters ---------------------------------------------------------------
-  const std::string& getLioOdometryFrame() { return lidarFrame_; }
   const std::string& getLeftGnssFrame() { return leftGnssFrame_; }
-  const std::string& getRightGnssFrame() { return rightGnssFrame_; }
   const std::string& getCabinFrame() { return cabinFrame_; }
 
  protected:  // Methods
