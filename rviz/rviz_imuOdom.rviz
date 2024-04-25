@@ -7,9 +7,8 @@ Panels:
         - /Global Options1
         - /Status1
         - /TF1
-        - /TF1/Status1
       Splitter Ratio: 0.5
-    Tree Height: 1461
+    Tree Height: 1522
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
@@ -119,125 +118,11 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: true
-        BASE:
-          Value: true
-        BASE_inertia:
-          Value: true
-        BOOM:
-          Value: true
-        CABIN:
-          Value: true
-        DIPPER:
-          Value: true
-        ENDEFFECTOR:
-          Value: true
-        ENDEFFECTOR_CONTACT:
-          Value: true
-        GNSS_L:
-          Value: true
-        GNSS_R:
-          Value: true
-        IMU_base_link:
-          Value: true
-        IMU_link:
-          Value: true
-        LF_BEAM:
-          Value: true
-        LF_BEARING:
-          Value: true
-        LF_KNUCKLE:
-          Value: true
-        LF_PARALLEL:
-          Value: true
-        LF_SWIVEL:
-          Value: true
-        LF_WHEEL:
-          Value: true
-        LF_WHEEL_CONTACT:
-          Value: true
-        LH_BEAM:
-          Value: true
-        LH_KNUCKLE:
-          Value: true
-        LH_OUTRIGGER:
-          Value: true
-        LH_ROTATOR:
-          Value: true
-        LH_WHEEL:
-          Value: true
-        LH_WHEEL_CONTACT:
-          Value: true
         Prism:
-          Value: true
-        RF_BEAM:
-          Value: true
-        RF_BEARING:
-          Value: true
-        RF_KNUCKLE:
-          Value: true
-        RF_PARALLEL:
-          Value: true
-        RF_SWIVEL:
-          Value: true
-        RF_WHEEL:
-          Value: true
-        RF_WHEEL_CONTACT:
-          Value: true
-        RH_BEAM:
-          Value: true
-        RH_KNUCKLE:
-          Value: true
-        RH_OUTRIGGER:
-          Value: true
-        RH_ROTATOR:
-          Value: true
-        RH_WHEEL:
-          Value: true
-        RH_WHEEL_CONTACT:
-          Value: true
-        ROTO:
-          Value: true
-        ROTO_BASE:
-          Value: true
-        SHOVEL:
-          Value: true
-        TELE:
           Value: true
         atnj1:
           Value: true
-        camMainView:
-          Value: true
-        compslam_lio/aft_mapped:
-          Value: true
-        compslam_lio/aft_mapped_to_init_CORRECTED:
-          Value: true
-        compslam_lio/camera:
-          Value: true
-        compslam_lio/camera_CORRECTED:
-          Value: true
-        compslam_lio/camera_init:
-          Value: true
-        compslam_lio/camera_init_CORRECTED:
-          Value: true
-        compslam_lio/camera_init_GRAVITY_ALIGNED:
-          Value: true
-        compslam_lio/laser_odom:
-          Value: true
-        compslam_lio/laser_odom_CORRECTED:
-          Value: true
-        imu_box_base_link:
-          Value: true
-        imu_box_link:
-          Value: true
-        livox_frame:
-          Value: true
-        os_imu:
-          Value: true
-        os_lidar:
-          Value: true
-        os_sensor:
-          Value: true
-        roof_top_box:
+        imu:
           Value: true
       Marker Alpha: 1
       Marker Scale: 1
@@ -246,90 +131,10 @@ Visualization Manager:
       Show Axes: true
       Show Names: true
       Tree:
-        BASE:
-          BASE_inertia:
-            {}
-          CABIN:
-            BOOM:
-              DIPPER:
-                TELE:
-                  ROTO_BASE:
-                    ROTO:
-                      ENDEFFECTOR:
-                        SHOVEL:
-                          ENDEFFECTOR_CONTACT:
-                            {}
-            GNSS_L:
-              {}
-            GNSS_R:
-              {}
-            camMainView:
-              livox_frame:
-                {}
-              os_sensor:
-                os_imu:
-                  {}
-                os_lidar:
-                  {}
-              roof_top_box:
-                imu_box_base_link:
-                  imu_box_link:
-                    {}
-          IMU_base_link:
-            IMU_link:
-              {}
-          LF_SWIVEL:
-            LF_BEAM:
-              LF_BEARING:
-                LF_KNUCKLE:
-                  LF_WHEEL:
-                    LF_WHEEL_CONTACT:
-                      {}
-            LF_PARALLEL:
-              {}
-          LH_ROTATOR:
-            LH_BEAM:
-              LH_KNUCKLE:
-                LH_OUTRIGGER:
-                  {}
-                LH_WHEEL:
-                  LH_WHEEL_CONTACT:
-                    {}
-          RF_SWIVEL:
-            RF_BEAM:
-              RF_BEARING:
-                RF_KNUCKLE:
-                  RF_WHEEL:
-                    RF_WHEEL_CONTACT:
-                      {}
-            RF_PARALLEL:
-              {}
-          RH_ROTATOR:
-            RH_BEAM:
-              RH_KNUCKLE:
-                RH_OUTRIGGER:
-                  {}
-                RH_WHEEL:
-                  RH_WHEEL_CONTACT:
-                    {}
         atnj1:
           Prism:
             {}
-        compslam_lio/camera_init:
-          compslam_lio/aft_mapped:
-            {}
-          compslam_lio/camera:
-            {}
-          compslam_lio/laser_odom:
-            {}
-        compslam_lio/camera_init_CORRECTED:
-          compslam_lio/aft_mapped_to_init_CORRECTED:
-            {}
-          compslam_lio/camera_CORRECTED:
-            {}
-          compslam_lio/camera_init_GRAVITY_ALIGNED:
-            {}
-          compslam_lio/laser_odom_CORRECTED:
+          imu:
             {}
       Update Interval: 0
       Value: true
@@ -337,7 +142,7 @@ Visualization Manager:
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: CABIN
+    Fixed Frame: vicon
     Frame Rate: 30
   Name: root
   Tools:
@@ -404,10 +209,10 @@ Visualization Manager:
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 1971
+  Height: 2032
   Hide Left Dock: false
   Hide Right Dock: false
-  QMainWindow State: 000000ff00000000fd00000004000000000000056c000006adfc0200000008fb0000001200530065006c0065006300740069006f006e00000001e10000009b000000b000fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000b0fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000006e000006ad0000018200fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261000000010000015f000006adfc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073010000006e000006ad0000013200fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e1000001970000000300000dfd0000005efc0100000002fb0000000800540069006d0065010000000000000dfd000006dc00fffffffb0000000800540069006d006501000000000000045000000000000000000000071a000006ad00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000400000000000002f0000006eafc0200000008fb0000001200530065006c0065006300740069006f006e00000001e10000009b000000b000fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000b0fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000006e000006ea0000018200fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261000000010000015f000006eafc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073000000006e000006ea0000013200fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000007380000005efc0100000002fb0000000800540069006d0065010000000000000738000006dc00fffffffb0000000800540069006d006501000000000000045000000000000000000000043c000006ea00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Time:
@@ -416,6 +221,6 @@ Window Geometry:
     collapsed: false
   Views:
     collapsed: false
-  Width: 3581
-  X: 173
-  Y: 141
+  Width: 1848
+  X: 1992
+  Y: 54
