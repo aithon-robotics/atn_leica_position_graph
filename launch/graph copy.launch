@@ -6,7 +6,7 @@
     <!-- Input Topics -->
     <arg name="imu_topic_name"            default="/microstrain_imu_node/microstrain_imu" />
     <arg name="lidar_odometry_topic_name" default="/compslam_lio/odom_aft_mapped_to_init_CORRECTED" />
-    <arg name="gnss_left_topic_name"      default="/m545_gnss_left" />
+    <arg name="gnss_left_topic_name"      default="/leica/position" />
     <arg name="gnss_right_topic_name"     default="/m545_gnss_right" />
 
     <!-- Config -->
@@ -19,7 +19,7 @@
     <arg name="description_name"          default="/heap_description" />
 
     <!-- Graph -->
-    <include file="$(find excavator_holistic_graph)/launch/graph_no_urdf.launch" pass_all_args="true"/>
+    <include file="$(find leica_position_graph)/launch/graph_no_urdf.launch" pass_all_args="true"/>
 
     <!-- Robot Desription -->
     <include file="$(find heap_urdf)/launch/load.launch" >
