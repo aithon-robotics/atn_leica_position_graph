@@ -25,7 +25,7 @@ Please see the LICENSE file that has been included as part of this package.
 #include <geometry_msgs/PointStamped.h>
 
 // Workspace
-#include "excavator_holistic_graph/ExcavatorStaticTransforms.h"
+#include "leica_position_graph/PositionStaticTransforms.h"
 #include "graph_msf/gnss/GnssHandler.h"
 #include "graph_msf/measurements/UnaryMeasurementXD.h"
 #include "graph_msf_ros/GraphMsfRos.h"

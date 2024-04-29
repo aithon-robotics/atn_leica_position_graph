@@ -6,11 +6,11 @@ Please see the LICENSE file that has been included as part of this package.
  */
 
 // Implementation
-#include "excavator_holistic_graph/ExcavatorEstimator.h"
+#include "leica_position_graph/PositionEstimator.h"
 
 // Project
-#include "excavator_holistic_graph/ExcavatorStaticTransforms.h"
-#include "excavator_holistic_graph/constants.h"
+#include "leica_position_graph/PositionStaticTransforms.h"
+#include "leica_position_graph/constants.h"
 
 // Workspace
 #include "graph_msf/measurements/BinaryMeasurementXD.h"

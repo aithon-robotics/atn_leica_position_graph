@@ -10,6 +10,6 @@ Please see the LICENSE file that has been included as part of this package.
 #ifndef M545ESTIMATOR_CONSTANTS_H
 #define M545ESTIMATOR_CONSTANTS_H
 
-#define REGULAR_COUT std::cout << YELLOW_START << "ExcavatorEstimatorGraph" << COLOR_END
+#define REGULAR_COUT std::cout << YELLOW_START << "PositionEstimatorGraph" << COLOR_END
 
 #endif  // M545ESTIMATOR_CONSTANTS_H

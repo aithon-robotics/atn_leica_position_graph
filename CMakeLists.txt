@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(leica_position_graph)
+project(atn_leica_position_graph)
 
 set(CATKIN_PACKAGE_DEPENDENCIES
   graph_msf
@@ -40,9 +40,9 @@ include_directories(
 
 # Library
 add_library(${PROJECT_NAME}
-        src/lib/ExcavatorEstimator.cpp
+        src/lib/PositionEstimator.cpp
         src/lib/readParams.cpp
-        src/lib/ExcavatorStaticTransforms.cpp
+        src/lib/PositionStaticTransforms.cpp
         )
 target_link_libraries(${PROJECT_NAME}
         ${catkin_LIBRARIES})

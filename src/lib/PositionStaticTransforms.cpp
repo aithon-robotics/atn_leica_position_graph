@@ -6,7 +6,7 @@ Please see the LICENSE file that has been included as part of this package.
  */
 
 // Implementation
-#include "excavator_holistic_graph/ExcavatorStaticTransforms.h"
+#include "leica_position_graph/PositionStaticTransforms.h"
 
 // ROS
 #include <ros/ros.h>

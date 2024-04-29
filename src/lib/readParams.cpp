@@ -5,7 +5,7 @@ This file is released under the "BSD-3-Clause License".
 Please see the LICENSE file that has been included as part of this package.
  */
 
-#include "excavator_holistic_graph/ExcavatorEstimator.h"
+#include "leica_position_graph/PositionEstimator.h"
 
 namespace excavator_se {
 
