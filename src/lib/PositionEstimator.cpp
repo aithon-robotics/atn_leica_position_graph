@@ -125,8 +125,8 @@ void PositionGraphEstimator::positionCallback_(const geometry_msgs::PointStamped
   if (!areYawAndPositionInited() && areRollAndPitchInited()) {  
     // Try to initialize yaw and position (WITH ZERO POSITION) if not done already
     if (this->initYawAndPosition(yaw_W_C, positionCoord, staticTransformsPtr_->getWorldFrame(),
-                                 dynamic_cast<PositionGraphStaticTransforms*>(staticTransformsPtr_.get())->getCabinFrame(),
-                                 dynamic_cast<PositionGraphStaticTransforms*>(staticTransformsPtr_.get())->getLeftGnssFrame())) {
+                                 dynamic_cast<PositionGraphStaticTransforms*>(staticTransformsPtr_.get())->getBodyFrame(),
+                                 dynamic_cast<PositionGraphStaticTransforms*>(staticTransformsPtr_.get())->getPositionMeasFrame())) {
       REGULAR_COUT << " Set yaw and position successfully." << std::endl;
     } else {
       REGULAR_COUT << " Could not set yaw and position." << std::endl;
@@ -138,7 +138,7 @@ void PositionGraphEstimator::positionCallback_(const geometry_msgs::PointStamped
                                             std::max(positionCovarianceXYZ(2), gnssPositionUnaryNoise_));
     graph_msf::UnaryMeasurementXD<Eigen::Vector3d, 3> meas_W_t_W_Position(
       "Leica-Position", int(gnssRate_), ros::Time::now().toSec(), staticTransformsPtr_->getWorldFrame() + "_ENU",
-      dynamic_cast<PositionGraphStaticTransforms*>(staticTransformsPtr_.get())->getLeftGnssFrame(), positionCoord, positionCovarianceXYZ,
+      dynamic_cast<PositionGraphStaticTransforms*>(staticTransformsPtr_.get())->getPositionMeasFrame(), positionCoord, positionCovarianceXYZ,
       GNSS_POSITION_COVARIANCE_VIOLATION_THRESHOLD);
     if (!this->addPositionMeasurement(meas_W_t_W_Position)) {
       if (PositionHealthyFlag__) {

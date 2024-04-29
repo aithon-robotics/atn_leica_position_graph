@@ -18,12 +18,12 @@ class PositionGraphStaticTransforms : public graph_msf::StaticTransformsTf {
                             const graph_msf::StaticTransforms& staticTransforms = graph_msf::StaticTransforms());
 
   // Setters ---------------------------------------------------------------
-  void setLeftGnssFrame(const std::string& s) { leftGnssFrame_ = s; }
-  void setCabinFrame(const std::string& s) { cabinFrame_ = s; }
+  void setPositionMeasFrame(const std::string& s) { positionMeasFrame_ = s; }
+  void setBodyFrame(const std::string& s) { bodyFrame_ = s; }
 
   // Getters ---------------------------------------------------------------
-  const std::string& getLeftGnssFrame() { return leftGnssFrame_; }
-  const std::string& getCabinFrame() { return cabinFrame_; }
+  const std::string& getPositionMeasFrame() { return positionMeasFrame_; }
+  const std::string& getBodyFrame() { return bodyFrame_; }
 
  protected:  // Methods
   void findTransformations() override;
@@ -31,9 +31,9 @@ class PositionGraphStaticTransforms : public graph_msf::StaticTransformsTf {
  private:  // Members
   // Robot frame names
   std::string lidarFrame_;
-  std::string leftGnssFrame_;
+  std::string positionMeasFrame_;
   std::string rightGnssFrame_;
-  std::string cabinFrame_;
+  std::string bodyFrame_;
 };
 }  // namespace positiongraph_se
 #endif  // end AsopStaticTransforms_H

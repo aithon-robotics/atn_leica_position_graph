@@ -21,11 +21,11 @@ void PositionGraphEstimator::readParams_(const ros::NodeHandle& privateNode) {
 
   // Set frames ----------------------------
   /// Cabin frame
-  std::string frame = graph_msf::tryGetParam<std::string>("extrinsics/cabinFrame", privateNode);
-  dynamic_cast<PositionGraphStaticTransforms*>(staticTransformsPtr_.get())->setCabinFrame(frame);
+  std::string frame = graph_msf::tryGetParam<std::string>("extrinsics/BodyFrame", privateNode);
+  dynamic_cast<PositionGraphStaticTransforms*>(staticTransformsPtr_.get())->setBodyFrame(frame);
   /// Left Gnss frame
-  frame = graph_msf::tryGetParam<std::string>("extrinsics/gnssFrame1", privateNode);
-  dynamic_cast<PositionGraphStaticTransforms*>(staticTransformsPtr_.get())->setLeftGnssFrame(frame);
+  frame = graph_msf::tryGetParam<std::string>("extrinsics/positionMeasFrame", privateNode);
+  dynamic_cast<PositionGraphStaticTransforms*>(staticTransformsPtr_.get())->setPositionMeasFrame(frame);
   // Sensor Parameters ----------------------------
   gnssRate_ = graph_msf::tryGetParam<double>("sensor_params/gnssRate", privateNode);
 
