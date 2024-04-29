@@ -1,6 +1,6 @@
 # Sensor Params
 sensor_params:
-  gnssRate: 20 # Rate of the GNSS
+  positionRate: 20 # Rate of the GNSS
 
 # Noise Parameters
 noise_params:
