@@ -27,7 +27,6 @@ void ExcavatorEstimator::readParams_(const ros::NodeHandle& privateNode) {
   frame = graph_msf::tryGetParam<std::string>("extrinsics/gnssFrame1", privateNode);
   dynamic_cast<ExcavatorStaticTransforms*>(staticTransformsPtr_.get())->setLeftGnssFrame(frame);
   // Sensor Parameters ----------------------------
-  lioOdometryRate_ = graph_msf::tryGetParam<double>("sensor_params/lioOdometryRate", privateNode);
   gnssRate_ = graph_msf::tryGetParam<double>("sensor_params/gnssRate", privateNode);
 
   /// Noise Parameters ----
