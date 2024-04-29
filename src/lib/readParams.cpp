@@ -7,9 +7,9 @@ Please see the LICENSE file that has been included as part of this package.
 
 #include "leica_position_graph/PositionEstimator.h"
 
-namespace excavator_se {
+namespace positiongraph_se {
 
-void ExcavatorEstimator::readParams_(const ros::NodeHandle& privateNode) {
+void PositionGraphEstimator::readParams_(const ros::NodeHandle& privateNode) {
   // Variables for parameter fetching
   double dParam;
   int iParam;
@@ -22,10 +22,10 @@ void ExcavatorEstimator::readParams_(const ros::NodeHandle& privateNode) {
   // Set frames ----------------------------
   /// Cabin frame
   std::string frame = graph_msf::tryGetParam<std::string>("extrinsics/cabinFrame", privateNode);
-  dynamic_cast<ExcavatorStaticTransforms*>(staticTransformsPtr_.get())->setCabinFrame(frame);
+  dynamic_cast<PositionGraphStaticTransforms*>(staticTransformsPtr_.get())->setCabinFrame(frame);
   /// Left Gnss frame
   frame = graph_msf::tryGetParam<std::string>("extrinsics/gnssFrame1", privateNode);
-  dynamic_cast<ExcavatorStaticTransforms*>(staticTransformsPtr_.get())->setLeftGnssFrame(frame);
+  dynamic_cast<PositionGraphStaticTransforms*>(staticTransformsPtr_.get())->setLeftGnssFrame(frame);
   // Sensor Parameters ----------------------------
   gnssRate_ = graph_msf::tryGetParam<double>("sensor_params/gnssRate", privateNode);
 
@@ -40,4 +40,4 @@ void ExcavatorEstimator::readParams_(const ros::NodeHandle& privateNode) {
   gnssHeadingUnaryNoise_ = graph_msf::tryGetParam<double>("noise_params/gnssHeadingUnaryNoise", privateNode);
 }
 
-}  // namespace excavator_se
+}  // namespace positiongraph_se

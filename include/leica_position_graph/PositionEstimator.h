@@ -35,13 +35,13 @@ Please see the LICENSE file that has been included as part of this package.
 #define GNSS_POSITION_COVARIANCE_VIOLATION_THRESHOLD 0.2  // 10000
 #define GNSS_HEADING_COVARIANCE_VIOLATION_THRESHOLD 1.0   // 10000
 
-namespace excavator_se {
+namespace positiongraph_se {
 
-class ExcavatorEstimator : public graph_msf::GraphMsfRos {
+class PositionGraphEstimator : public graph_msf::GraphMsfRos {
  public:
-  ExcavatorEstimator(std::shared_ptr<ros::NodeHandle> privateNodePtr);
+  PositionGraphEstimator(std::shared_ptr<ros::NodeHandle> privateNodePtr);
   // Destructor
-  ~ExcavatorEstimator() = default;
+  ~PositionGraphEstimator() = default;
   // Setup
   virtual bool setup() override;
 
@@ -98,5 +98,5 @@ class ExcavatorEstimator : public graph_msf::GraphMsfRos {
   /// Flags
 
 };
-}  // namespace excavator_se
+}  // namespace positiongraph_se
 #endif  // end EXCAVATOR_ESTIMATOR_H

@@ -14,15 +14,15 @@ Please see the LICENSE file that has been included as part of this package.
 // Workspace
 #include "graph_msf_ros/util/conversions.h"
 
-namespace excavator_se {
+namespace positiongraph_se {
 
-ExcavatorStaticTransforms::ExcavatorStaticTransforms(const std::shared_ptr<ros::NodeHandle> privateNodePtr,
+PositionGraphStaticTransforms::PositionGraphStaticTransforms(const std::shared_ptr<ros::NodeHandle> privateNodePtr,
                                                      const graph_msf::StaticTransforms& staticTransforms)
     : graph_msf::StaticTransformsTf(staticTransforms) {
   std::cout << YELLOW_START << "StaticTransformsTf" << GREEN_START << " Initializing static transforms..." << COLOR_END << std::endl;
 }
 
-void ExcavatorStaticTransforms::findTransformations() {
+void PositionGraphStaticTransforms::findTransformations() {
   // Print to console --------------------------
   std::cout << YELLOW_START << "StaticTransformsTf" << COLOR_END << " Looking up transforms in TF-tree." << std::endl;
   std::cout << YELLOW_START << "StaticTransformsTf" << COLOR_END << " Transforms between the following frames are required:" << std::endl;
@@ -71,4 +71,4 @@ void ExcavatorStaticTransforms::findTransformations() {
   std::cout << YELLOW_START << "StaticTransformsTf" << GREEN_START << " Transforms looked up successfully." << COLOR_END << std::endl;
 }
 
-}  // namespace excavator_se
+}  // namespace positiongraph_se

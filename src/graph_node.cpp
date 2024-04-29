@@ -19,7 +19,7 @@ int main(int argc, char** argv) {
   ros::MultiThreadedSpinner spinner(4);
 
   // Create Instance
-  excavator_se::ExcavatorEstimator excavatorEstimator(privateNodePtr);
+  positiongraph_se::PositionGraphEstimator PositionGraphEstimator(privateNodePtr);
   spinner.spin();
 
   return 0;

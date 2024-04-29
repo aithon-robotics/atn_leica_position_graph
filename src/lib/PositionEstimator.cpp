@@ -17,21 +17,21 @@ Please see the LICENSE file that has been included as part of this package.
 #include "graph_msf/measurements/UnaryMeasurementXD.h"
 #include "graph_msf_ros/util/conversions.h"
 
-namespace excavator_se {
+namespace positiongraph_se {
 
-ExcavatorEstimator::ExcavatorEstimator(std::shared_ptr<ros::NodeHandle> privateNodePtr) : graph_msf::GraphMsfRos(privateNodePtr) {
+PositionGraphEstimator::PositionGraphEstimator(std::shared_ptr<ros::NodeHandle> privateNodePtr) : graph_msf::GraphMsfRos(privateNodePtr) {
 
   std::cout << YELLOW_START << "LeicaPositionEstimator" << GREEN_START << " Setting up." << COLOR_END << std::endl;
 
   // Configurations ----------------------------
   // Static Transforms
-  staticTransformsPtr_ = std::make_shared<ExcavatorStaticTransforms>(privateNodePtr);
+  staticTransformsPtr_ = std::make_shared<PositionGraphStaticTransforms>(privateNodePtr);
 
   // GNSS Handler
   gnssHandlerPtr_ = std::make_shared<graph_msf::GnssHandler>();
 
   // Setup
-  if (not ExcavatorEstimator::setup()) {
+  if (not PositionGraphEstimator::setup()) {
     REGULAR_COUT << RED_START << " Failed to set up." << COLOR_END << std::endl;
     throw std::runtime_error("LeicaPositionEstimator could not be initialized");
   }
@@ -41,12 +41,12 @@ ExcavatorEstimator::ExcavatorEstimator(std::shared_ptr<ros::NodeHandle> privateN
 
 
 //---------------------------------------------------------------
-bool ExcavatorEstimator::setup() {
+bool PositionGraphEstimator::setup() {
 
   REGULAR_COUT << GREEN_START << " Setting up." << COLOR_END << std::endl;
 
   // Read parameters ----------------------------
-  ExcavatorEstimator::readParams_(privateNode_);
+  PositionGraphEstimator::readParams_(privateNode_);
 
   // Super class
   if (not graph_msf::GraphMsfRos::setup()) {
@@ -54,13 +54,13 @@ bool ExcavatorEstimator::setup() {
   }
 
   // Publishers ----------------------------
-  ExcavatorEstimator::initializePublishers_(privateNode_);
+  PositionGraphEstimator::initializePublishers_(privateNode_);
 
   // Subscribers ----------------------------
-  ExcavatorEstimator::initializeSubscribers_(privateNode_);
+  PositionGraphEstimator::initializeSubscribers_(privateNode_);
 
   // Messages ----------------------------
-  ExcavatorEstimator::initializeMessages_(privateNode_);
+  PositionGraphEstimator::initializeMessages_(privateNode_);
 
   // Static Transforms
   staticTransformsPtr_->findTransformations();
@@ -73,7 +73,7 @@ bool ExcavatorEstimator::setup() {
 
 
 //---------------------------------------------------------------
-void ExcavatorEstimator::initializePublishers_(ros::NodeHandle& privateNode) {
+void PositionGraphEstimator::initializePublishers_(ros::NodeHandle& privateNode) {
   // Status
   REGULAR_COUT << GREEN_START << " Initializing Publishers..." << COLOR_END << std::endl;
 
@@ -81,10 +81,10 @@ void ExcavatorEstimator::initializePublishers_(ros::NodeHandle& privateNode) {
   pubMeasWorldPositionPath_ = privateNode.advertise<nav_msgs::Path>("/graph_msf/measGnssL_path_world_gnssL", ROS_QUEUE_SIZE);
 }
 
-void ExcavatorEstimator::initializeSubscribers_(ros::NodeHandle& privateNode) {
+void PositionGraphEstimator::initializeSubscribers_(ros::NodeHandle& privateNode) {
 
   subPosition_ = privateNode.subscribe<geometry_msgs::PointStamped>(
-    "/gnss_topic_1", ROS_QUEUE_SIZE,  &ExcavatorEstimator::positionCallback_, this, ros::TransportHints().tcpNoDelay());
+    "/gnss_topic_1", ROS_QUEUE_SIZE,  &PositionGraphEstimator::positionCallback_, this, ros::TransportHints().tcpNoDelay());
 
   std::cout << YELLOW_START << "FactorGraphFiltering" << COLOR_END << " Initialized Position subscriber (on Gnss_topic_1)." << std::endl;
   return;
@@ -92,7 +92,7 @@ void ExcavatorEstimator::initializeSubscribers_(ros::NodeHandle& privateNode) {
 
 
 //---------------------------------------------------------------
-void ExcavatorEstimator::initializeMessages_(ros::NodeHandle& privateNode) {
+void PositionGraphEstimator::initializeMessages_(ros::NodeHandle& privateNode) {
   // Status
   REGULAR_COUT << GREEN_START << " Initializing Messages..." << COLOR_END << std::endl;
 
@@ -102,7 +102,7 @@ void ExcavatorEstimator::initializeMessages_(ros::NodeHandle& privateNode) {
 
 
 //---------------------------------------------------------------
-void ExcavatorEstimator::positionCallback_(const geometry_msgs::PointStamped::ConstPtr& LeicaPositionPtr) {
+void PositionGraphEstimator::positionCallback_(const geometry_msgs::PointStamped::ConstPtr& LeicaPositionPtr) {
   
   // Static variables
   static Eigen::Vector3d zeroCoord(0.0, 0.0, 0.0);
@@ -125,8 +125,8 @@ void ExcavatorEstimator::positionCallback_(const geometry_msgs::PointStamped::Co
   if (!areYawAndPositionInited() && areRollAndPitchInited()) {  
     // Try to initialize yaw and position (WITH ZERO POSITION) if not done already
     if (this->initYawAndPosition(yaw_W_C, positionCoord, staticTransformsPtr_->getWorldFrame(),
-                                 dynamic_cast<ExcavatorStaticTransforms*>(staticTransformsPtr_.get())->getCabinFrame(),
-                                 dynamic_cast<ExcavatorStaticTransforms*>(staticTransformsPtr_.get())->getLeftGnssFrame())) {
+                                 dynamic_cast<PositionGraphStaticTransforms*>(staticTransformsPtr_.get())->getCabinFrame(),
+                                 dynamic_cast<PositionGraphStaticTransforms*>(staticTransformsPtr_.get())->getLeftGnssFrame())) {
       REGULAR_COUT << " Set yaw and position successfully." << std::endl;
     } else {
       REGULAR_COUT << " Could not set yaw and position." << std::endl;
@@ -138,7 +138,7 @@ void ExcavatorEstimator::positionCallback_(const geometry_msgs::PointStamped::Co
                                             std::max(positionCovarianceXYZ(2), gnssPositionUnaryNoise_));
     graph_msf::UnaryMeasurementXD<Eigen::Vector3d, 3> meas_W_t_W_Position(
       "Leica-Position", int(gnssRate_), ros::Time::now().toSec(), staticTransformsPtr_->getWorldFrame() + "_ENU",
-      dynamic_cast<ExcavatorStaticTransforms*>(staticTransformsPtr_.get())->getLeftGnssFrame(), positionCoord, positionCovarianceXYZ,
+      dynamic_cast<PositionGraphStaticTransforms*>(staticTransformsPtr_.get())->getLeftGnssFrame(), positionCoord, positionCovarianceXYZ,
       GNSS_POSITION_COVARIANCE_VIOLATION_THRESHOLD);
     if (!this->addPositionMeasurement(meas_W_t_W_Position)) {
       if (PositionHealthyFlag__) {
@@ -159,16 +159,16 @@ void ExcavatorEstimator::positionCallback_(const geometry_msgs::PointStamped::Co
 
 
 //---------------------------------------------------------------
-void ExcavatorEstimator::publishState_(
+void PositionGraphEstimator::publishState_(
     const std::shared_ptr<graph_msf::SafeIntegratedNavState>& preIntegratedNavStatePtr,
     const std::shared_ptr<graph_msf::SafeNavStateWithCovarianceAndBias>& optimizedStateWithCovarianceAndBiasPtr) {
   // Lookup I->B, also influenced by rotation of cabin
   static tf::StampedTransform transform_I_B;
   tfListener_.waitForTransform(staticTransformsPtr_->getImuFrame(),
-                               dynamic_cast<ExcavatorStaticTransforms*>(staticTransformsPtr_.get())->getBaseLinkFrame(), ros::Time(0),
+                               dynamic_cast<PositionGraphStaticTransforms*>(staticTransformsPtr_.get())->getBaseLinkFrame(), ros::Time(0),
                                ros::Duration(0.1));
   tfListener_.lookupTransform(staticTransformsPtr_->getImuFrame(),
-                              dynamic_cast<ExcavatorStaticTransforms*>(staticTransformsPtr_.get())->getBaseLinkFrame(), ros::Time(0),
+                              dynamic_cast<PositionGraphStaticTransforms*>(staticTransformsPtr_.get())->getBaseLinkFrame(), ros::Time(0),
                               transform_I_B);
   // Update Imu->Base transformation
   graph_msf::tfToIsometry3(transform_I_B, staticTransformsPtr_->lv_T_frame1_frame2(staticTransformsPtr_->getImuFrame(),
@@ -181,4 +181,4 @@ void ExcavatorEstimator::publishState_(
   graph_msf::GraphMsfRos::publishState_(preIntegratedNavStatePtr, optimizedStateWithCovarianceAndBiasPtr);
 }
 
-}  // namespace excavator_se
+}  // namespace positiongraph_se

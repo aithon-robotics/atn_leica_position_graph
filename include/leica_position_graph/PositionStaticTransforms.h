@@ -5,16 +5,16 @@ This file is released under the "BSD-3-Clause License".
 Please see the LICENSE file that has been included as part of this package.
  */
 
-#ifndef ExcavatorStaticTransforms_H
-#define ExcavatorStaticTransforms_H
+#ifndef PositionGraphStaticTransforms_H
+#define PositionGraphStaticTransforms_H
 // Workspace
 #include "graph_msf_ros/extrinsics/StaticTransformsTf.h"
 
-namespace excavator_se {
+namespace positiongraph_se {
 
-class ExcavatorStaticTransforms : public graph_msf::StaticTransformsTf {
+class PositionGraphStaticTransforms : public graph_msf::StaticTransformsTf {
  public:
-  ExcavatorStaticTransforms(const std::shared_ptr<ros::NodeHandle> privateNodePtr,
+  PositionGraphStaticTransforms(const std::shared_ptr<ros::NodeHandle> privateNodePtr,
                             const graph_msf::StaticTransforms& staticTransforms = graph_msf::StaticTransforms());
 
   // Setters ---------------------------------------------------------------
@@ -35,5 +35,5 @@ class ExcavatorStaticTransforms : public graph_msf::StaticTransformsTf {
   std::string rightGnssFrame_;
   std::string cabinFrame_;
 };
-}  // namespace excavator_se
+}  // namespace positiongraph_se
 #endif  // end AsopStaticTransforms_H
