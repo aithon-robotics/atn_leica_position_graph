@@ -5,13 +5,7 @@
 
     <!-- Input Topics -->
     <arg name="imu_topic_name"            default="/atnj1/imu/data_raw" />
-    <arg name="gnss_left_topic_name"      default="/leica/position/rostime" />
-
-    <!-- Config -->
-    <arg name="extrinsics_from_urdf"      default="false" />
-    <arg name="useLeftGnss"               default="true" />
-    <arg name="useRightGnss"              default="false" />
-    <arg name="useLioOdometry"            default="false" />
+    <arg name="position_topic_name"      default="/leica/position/rostime" />
 
     <!-- Graph -->
     <include file="$(find atn_leica_position_graph)/launch/graph_no_urdf.launch" pass_all_args="true"/>

@@ -26,8 +26,7 @@ void PositionGraphStaticTransforms::findTransformations() {
   // Print to console --------------------------
   std::cout << YELLOW_START << "StaticTransformsTf" << COLOR_END << " Looking up transforms in TF-tree." << std::endl;
   std::cout << YELLOW_START << "StaticTransformsTf" << COLOR_END << " Transforms between the following frames are required:" << std::endl;
-  std::cout << YELLOW_START << "StaticTransformsTf" << COLOR_END << " " << lidarFrame_ << ", " << positionMeasFrame_ << ", " << rightGnssFrame_
-            << ", " << bodyFrame_ << ", " << imuFrame_ << ", " << baseLinkFrame_ << std::endl;
+  std::cout << YELLOW_START << "StaticTransformsTf" << COLOR_END << " " << ", " << positionMeasFrame_ << ", " << ", " << bodyFrame_ << ", " << imuFrame_ << ", " << baseLinkFrame_ << std::endl;
   std::cout << YELLOW_START << "StaticTransformsTf" << COLOR_END << " Waiting for up to 100 seconds until they arrive..." << std::endl;
 
   // Temporary variable

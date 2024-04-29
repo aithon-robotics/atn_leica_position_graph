@@ -78,15 +78,15 @@ void PositionGraphEstimator::initializePublishers_(ros::NodeHandle& privateNode)
   REGULAR_COUT << GREEN_START << " Initializing Publishers..." << COLOR_END << std::endl;
 
   // Paths
-  pubMeasWorldPositionPath_ = privateNode.advertise<nav_msgs::Path>("/graph_msf/measGnssL_path_world_gnssL", ROS_QUEUE_SIZE);
+  pubMeasWorldPositionPath_ = privateNode.advertise<nav_msgs::Path>("/graph_msf/measPositionL_path_world_prism", ROS_QUEUE_SIZE);
 }
 
 void PositionGraphEstimator::initializeSubscribers_(ros::NodeHandle& privateNode) {
 
   subPosition_ = privateNode.subscribe<geometry_msgs::PointStamped>(
-    "/gnss_topic_1", ROS_QUEUE_SIZE,  &PositionGraphEstimator::positionCallback_, this, ros::TransportHints().tcpNoDelay());
+    "/position_topic", ROS_QUEUE_SIZE,  &PositionGraphEstimator::positionCallback_, this, ros::TransportHints().tcpNoDelay());
 
-  std::cout << YELLOW_START << "FactorGraphFiltering" << COLOR_END << " Initialized Position subscriber (on Gnss_topic_1)." << std::endl;
+  std::cout << YELLOW_START << "FactorGraphFiltering" << COLOR_END << " Initialized Position subscriber (on position_topic)." << std::endl;
   return;
 }
 
@@ -97,7 +97,7 @@ void PositionGraphEstimator::initializeMessages_(ros::NodeHandle& privateNode) {
   REGULAR_COUT << GREEN_START << " Initializing Messages..." << COLOR_END << std::endl;
 
   // Paths
-  measGnss_worldPositionPathPtr_ = nav_msgs::PathPtr(new nav_msgs::Path);
+  measPosition_worldPositionPathPtr_ = nav_msgs::PathPtr(new nav_msgs::Path);
 }
 
 
@@ -133,28 +133,28 @@ void PositionGraphEstimator::positionCallback_(const geometry_msgs::PointStamped
       }
   } else {  
     // Already initialized --> add position measurement to graph
-    positionCovarianceXYZ = Eigen::Vector3d(std::max(positionCovarianceXYZ(0), gnssPositionUnaryNoise_),
-                                            std::max(positionCovarianceXYZ(1), gnssPositionUnaryNoise_),
-                                            std::max(positionCovarianceXYZ(2), gnssPositionUnaryNoise_));
+    positionCovarianceXYZ = Eigen::Vector3d(std::max(positionCovarianceXYZ(0), positionMeasUnaryNoise_),
+                                            std::max(positionCovarianceXYZ(1), positionMeasUnaryNoise_),
+                                            std::max(positionCovarianceXYZ(2), positionMeasUnaryNoise_));
     graph_msf::UnaryMeasurementXD<Eigen::Vector3d, 3> meas_W_t_W_Position(
       "Leica-Position", int(positionRate_), LeicaPositionPtr->header.stamp.toSec(), staticTransformsPtr_->getWorldFrame() + "_ENU",
       dynamic_cast<PositionGraphStaticTransforms*>(staticTransformsPtr_.get())->getPositionMeasFrame(), positionCoord, positionCovarianceXYZ,
-      GNSS_POSITION_COVARIANCE_VIOLATION_THRESHOLD);
+      POSITION_MEAS_POSITION_COVARIANCE_VIOLATION_THRESHOLD);
     if (!this->addPositionMeasurement(meas_W_t_W_Position)) {
       if (PositionHealthyFlag__) {
-        REGULAR_COUT << RED_START << " Gnss left position measurement not added." << COLOR_END << std::endl;
+        REGULAR_COUT << RED_START << " Position measurement not added." << COLOR_END << std::endl;
         PositionHealthyFlag__ = false;
       }
     } else if (!PositionHealthyFlag__) {
-      REGULAR_COUT << GREEN_START << " Gnss left position measurement returned." << COLOR_END << std::endl;
+      REGULAR_COUT << GREEN_START << " Position measurement returned." << COLOR_END << std::endl;
       PositionHealthyFlag__ = true;
     }
   }
 
   // Visualizations
-  addToPathMsg(measGnss_worldPositionPathPtr_, staticTransformsPtr_->getWorldFrame(), LeicaPositionPtr->header.stamp, positionCoord,
+  addToPathMsg(measPosition_worldPositionPathPtr_, staticTransformsPtr_->getWorldFrame(), LeicaPositionPtr->header.stamp, positionCoord,
                graphConfigPtr_->imuBufferLength * 4);
-  pubMeasWorldPositionPath_.publish(measGnss_worldPositionPathPtr_);
+  pubMeasWorldPositionPath_.publish(measPosition_worldPositionPathPtr_);
 }
 
 

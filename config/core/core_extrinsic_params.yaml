@@ -2,6 +2,6 @@
 extrinsics:
   worldFrame: world
   odomFrame: odom
-  imuFrame: imu     #imu  #Frame of IMU used in integrator - Used for lookup transform to lidarFrame
+  imuFrame: imu     #imu  #Frame of IMU used in integrator
   baseLinkFrame: atnj1
   initializeZeroYawAndPositionOfFrame: atnj1

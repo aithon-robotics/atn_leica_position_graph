@@ -5,14 +5,7 @@
 
     <!-- Input Topics -->
     <arg name="imu_topic_name"            default="/default/imu" />
-    <arg name="gnss_left_topic_name"      default="/default/position" />
-
-    <!-- Config -->
-    <arg name="extrinsics_from_urdf"      default="false" />
-    <arg name="useLeftGnss"               default="true" />
-
-    <!-- Description -->
-    <arg name="description_name"          default="/heap_description" />
+    <arg name="position_topic_name"      default="/default/position" />
 
     <!-- Config Files -->
     <arg name="core_graph_config_file"         default="$(find atn_leica_position_graph)/config/core/core_graph_config.yaml"/>
@@ -23,9 +16,6 @@
 
     <!-- Node -->
     <node pkg="atn_leica_position_graph" type="atn_leica_position_graph_node" name="holistic_graph_node" output="screen" > <!-- launch-prefix="gdb -args"-->
-        <!-- Launch Parameters -->
-        <param name="launch/descriptionName" type="string" value="$(arg description_name)" />
-        <param name="launch/useLeftGnss" type="bool" value="$(arg useLeftGnss)" />
 
         <!-- Parameter files -->
         <rosparam command="load" file="$(arg core_graph_config_file)" />
@@ -36,7 +26,7 @@
 
         <!-- Remapping of topics -->
         <remap from="/imu_topic"            to="$(arg imu_topic_name)" />
-        <remap from="/gnss_topic_1"         to="$(arg gnss_left_topic_name)" />
+        <remap from="/position_topic"         to="$(arg position_topic_name)" />
     </node>
 
     <!-- RVIZ for Visualization -->

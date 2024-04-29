@@ -30,9 +30,7 @@ class PositionGraphStaticTransforms : public graph_msf::StaticTransformsTf {
 
  private:  // Members
   // Robot frame names
-  std::string lidarFrame_;
   std::string positionMeasFrame_;
-  std::string rightGnssFrame_;
   std::string bodyFrame_;
 };
 }  // namespace positiongraph_se

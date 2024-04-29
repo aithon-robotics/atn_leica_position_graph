@@ -31,9 +31,9 @@ Please see the LICENSE file that has been included as part of this package.
 #include "graph_msf_ros/GraphMsfRos.h"
 
 // Defined Macros
-#define NUM_GNSS_CALLBACKS_UNTIL_START 20
-#define GNSS_POSITION_COVARIANCE_VIOLATION_THRESHOLD 0.2  // 10000
-#define GNSS_HEADING_COVARIANCE_VIOLATION_THRESHOLD 1.0   // 10000
+#define NUM_POSITION_CALLBACKS_UNTIL_START 20
+#define POSITION_MEAS_POSITION_COVARIANCE_VIOLATION_THRESHOLD 0.2  // 10000
+#define POSITION_MEAS_HEADING_COVARIANCE_VIOLATION_THRESHOLD 1.0   // 10000
 
 namespace positiongraph_se {
 
@@ -56,7 +56,7 @@ class PositionGraphEstimator : public graph_msf::GraphMsfRos {
   void readParams_(const ros::NodeHandle& privateNode) override;
 
   // Callbacks
-  void positionCallback_(const geometry_msgs::PointStamped::ConstPtr& leftGnssMsgPtr);
+  void positionCallback_(const geometry_msgs::PointStamped::ConstPtr& LeicaPositionPtr);
 
 
   // Publish State
@@ -71,7 +71,7 @@ class PositionGraphEstimator : public graph_msf::GraphMsfRos {
 
   // Messages
   // Paths
-  nav_msgs::PathPtr measGnss_worldPositionPathPtr_;
+  nav_msgs::PathPtr measPosition_worldPositionPathPtr_;
 
   // Subscribers
   ros::Subscriber subImu_;
@@ -87,13 +87,10 @@ class PositionGraphEstimator : public graph_msf::GraphMsfRos {
   std::shared_ptr<graph_msf::GnssHandler> gnssHandlerPtr_;
 
   // Rates
-  double lioOdometryRate_ = 5.0;
   double positionRate_ = 20.0;
 
   // Noise
-  Eigen::Matrix<double, 6, 1> lioPoseUnaryNoise_;
-  double gnssPositionUnaryNoise_ = 1.0;  // in [m]
-  double gnssHeadingUnaryNoise_ = 1.0;   // in [rad]
+  double positionMeasUnaryNoise_ = 1.0;  // in [m]
 
   /// Flags
 
