@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <package>
-  <name>leica_position_graph</name>
+  <name>atn_leica_position_graph</name>
   <version>0.0.0</version>
 
   <description>
-    State estimation based on factor graphs, utilizing GTSAM functionality. Fusion of IMU, LiDAR Mapping Odometry and GNSS estimates.
+    State estimation based on factor graphs, utilizing GTSAM functionality. Fusion of IMU, Leica Position estimates.
   </description>
 
   <maintainer email="nubertj@ethz.ch">Julian Nubert</maintainer>

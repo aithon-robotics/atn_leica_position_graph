@@ -6,7 +6,7 @@ Please see the LICENSE file that has been included as part of this package.
  */
 
 // Implementation
-#include "excavator_holistic_graph/ExcavatorStaticTransforms.h"
+#include "leica_position_graph/PositionStaticTransforms.h"
 
 // ROS
 #include <ros/ros.h>
@@ -14,20 +14,19 @@ Please see the LICENSE file that has been included as part of this package.
 // Workspace
 #include "graph_msf_ros/util/conversions.h"
 
-namespace excavator_se {
+namespace positiongraph_se {
 
-ExcavatorStaticTransforms::ExcavatorStaticTransforms(const std::shared_ptr<ros::NodeHandle> privateNodePtr,
+PositionGraphStaticTransforms::PositionGraphStaticTransforms(const std::shared_ptr<ros::NodeHandle> privateNodePtr,
                                                      const graph_msf::StaticTransforms& staticTransforms)
     : graph_msf::StaticTransformsTf(staticTransforms) {
   std::cout << YELLOW_START << "StaticTransformsTf" << GREEN_START << " Initializing static transforms..." << COLOR_END << std::endl;
 }
 
-void ExcavatorStaticTransforms::findTransformations() {
+void PositionGraphStaticTransforms::findTransformations() {
   // Print to console --------------------------
   std::cout << YELLOW_START << "StaticTransformsTf" << COLOR_END << " Looking up transforms in TF-tree." << std::endl;
   std::cout << YELLOW_START << "StaticTransformsTf" << COLOR_END << " Transforms between the following frames are required:" << std::endl;
-  std::cout << YELLOW_START << "StaticTransformsTf" << COLOR_END << " " << lidarFrame_ << ", " << leftGnssFrame_ << ", " << rightGnssFrame_
-            << ", " << cabinFrame_ << ", " << imuFrame_ << ", " << baseLinkFrame_ << std::endl;
+  std::cout << YELLOW_START << "StaticTransformsTf" << COLOR_END << " " << ", " << positionMeasFrame_ << ", " << ", " << bodyFrame_ << ", " << imuFrame_ << ", " << baseLinkFrame_ << std::endl;
   std::cout << YELLOW_START << "StaticTransformsTf" << COLOR_END << " Waiting for up to 100 seconds until they arrive..." << std::endl;
 
   // Temporary variable
@@ -39,14 +38,14 @@ void ExcavatorStaticTransforms::findTransformations() {
   rosRate.sleep();
 
   // Imu to Cabin Link ---
-  listener_.waitForTransform(imuFrame_, cabinFrame_, ros::Time(0), ros::Duration(100.0));
-  listener_.lookupTransform(imuFrame_, cabinFrame_, ros::Time(0), transform);
+  listener_.waitForTransform(imuFrame_, bodyFrame_, ros::Time(0), ros::Duration(100.0));
+  listener_.lookupTransform(imuFrame_, bodyFrame_, ros::Time(0), transform);
   // I_Cabin
-  graph_msf::tfToIsometry3(tf::Transform(transform), lv_T_frame1_frame2(imuFrame_, cabinFrame_));
+  graph_msf::tfToIsometry3(tf::Transform(transform), lv_T_frame1_frame2(imuFrame_, bodyFrame_));
   std::cout << YELLOW_START << "CompslamEstimator" << COLOR_END
-            << " Translation I_Cabin: " << rv_T_frame1_frame2(imuFrame_, cabinFrame_).translation() << std::endl;
+            << " Translation I_Cabin: " << rv_T_frame1_frame2(imuFrame_, bodyFrame_).translation() << std::endl;
   // Cabin_I
-  lv_T_frame1_frame2(cabinFrame_, imuFrame_) = rv_T_frame1_frame2(imuFrame_, cabinFrame_).inverse();
+  lv_T_frame1_frame2(bodyFrame_, imuFrame_) = rv_T_frame1_frame2(imuFrame_, bodyFrame_).inverse();
 
   // Imu to Base Link ---
   listener_.waitForTransform(imuFrame_, baseLinkFrame_, ros::Time(0), ros::Duration(1.0));
@@ -59,16 +58,16 @@ void ExcavatorStaticTransforms::findTransformations() {
   lv_T_frame1_frame2(baseLinkFrame_, imuFrame_) = rv_T_frame1_frame2(imuFrame_, baseLinkFrame_).inverse();
 
   // Imu to GNSS Left Link ---
-  listener_.waitForTransform(imuFrame_, leftGnssFrame_, ros::Time(0), ros::Duration(1.0));
-  listener_.lookupTransform(imuFrame_, leftGnssFrame_, ros::Time(0), transform);
+  listener_.waitForTransform(imuFrame_, positionMeasFrame_, ros::Time(0), ros::Duration(1.0));
+  listener_.lookupTransform(imuFrame_, positionMeasFrame_, ros::Time(0), transform);
   // I_GnssL
-  graph_msf::tfToIsometry3(tf::Transform(transform), lv_T_frame1_frame2(imuFrame_, leftGnssFrame_));
+  graph_msf::tfToIsometry3(tf::Transform(transform), lv_T_frame1_frame2(imuFrame_, positionMeasFrame_));
   std::cout << YELLOW_START << "CompslamEstimator" << COLOR_END
-            << " Translation I_GnssL: " << rv_T_frame1_frame2(imuFrame_, leftGnssFrame_).translation() << std::endl;
+            << " Translation I_GnssL: " << rv_T_frame1_frame2(imuFrame_, positionMeasFrame_).translation() << std::endl;
   // GnssL_I
-  lv_T_frame1_frame2(leftGnssFrame_, imuFrame_) = rv_T_frame1_frame2(imuFrame_, leftGnssFrame_).inverse();
+  lv_T_frame1_frame2(positionMeasFrame_, imuFrame_) = rv_T_frame1_frame2(imuFrame_, positionMeasFrame_).inverse();
 
   std::cout << YELLOW_START << "StaticTransformsTf" << GREEN_START << " Transforms looked up successfully." << COLOR_END << std::endl;
 }
 
-}  // namespace excavator_se
+}  // namespace positiongraph_se

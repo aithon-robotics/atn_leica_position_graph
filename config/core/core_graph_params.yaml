@@ -12,17 +12,13 @@ initialization_params:
   gravityMagnitude: 9.80600               # If estimateGravityFromImu is false, this value is used as gravity
 
 # Factor Graph
-graph_params:
-  useIsam: true                           # if false, then levenberg-marquardt is used, CURRENTLY NO EFFECT
-  
-  # Timon added FIX???
+graph_params:  
   realTimeSmootherUseIsam: true
   realTimeSmootherLag: 1.5                # Lag of real-time fixed lag smoother[seconds]
   useAdditionalSlowBatchSmoother: true    # If true, a slower smoother is used in addition to the real-time smoother
   slowBatchSmootherUseIsam: false         # if false, then levenberg-marquardt is used for the slow batch smoother, NO EFFECT YET
   # ----------------
 
-  smootherLag: 1.5                        # Lag of fixed lag smoother[seconds], not needed for ISAM2
   gaussNewtonWildfireThreshold: 0.001     # Threshold for the wildfire in the Gauss-Newton optimization
   maxOptimizationFrequency: 20.0          # Maximum optimization frequency [Hz], can be used to control computational load
   additionalOptimizationIterations: 0     #Additional iterations of graph optimizer after update with new factors

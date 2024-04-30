@@ -5,35 +5,33 @@ This file is released under the "BSD-3-Clause License".
 Please see the LICENSE file that has been included as part of this package.
  */
 
-#ifndef ExcavatorStaticTransforms_H
-#define ExcavatorStaticTransforms_H
+#ifndef PositionGraphStaticTransforms_H
+#define PositionGraphStaticTransforms_H
 // Workspace
 #include "graph_msf_ros/extrinsics/StaticTransformsTf.h"
 
-namespace excavator_se {
+namespace positiongraph_se {
 
-class ExcavatorStaticTransforms : public graph_msf::StaticTransformsTf {
+class PositionGraphStaticTransforms : public graph_msf::StaticTransformsTf {
  public:
-  ExcavatorStaticTransforms(const std::shared_ptr<ros::NodeHandle> privateNodePtr,
+  PositionGraphStaticTransforms(const std::shared_ptr<ros::NodeHandle> privateNodePtr,
                             const graph_msf::StaticTransforms& staticTransforms = graph_msf::StaticTransforms());
 
   // Setters ---------------------------------------------------------------
-  void setLeftGnssFrame(const std::string& s) { leftGnssFrame_ = s; }
-  void setCabinFrame(const std::string& s) { cabinFrame_ = s; }
+  void setPositionMeasFrame(const std::string& s) { positionMeasFrame_ = s; }
+  void setBodyFrame(const std::string& s) { bodyFrame_ = s; }
 
   // Getters ---------------------------------------------------------------
-  const std::string& getLeftGnssFrame() { return leftGnssFrame_; }
-  const std::string& getCabinFrame() { return cabinFrame_; }
+  const std::string& getPositionMeasFrame() { return positionMeasFrame_; }
+  const std::string& getBodyFrame() { return bodyFrame_; }
 
  protected:  // Methods
   void findTransformations() override;
 
  private:  // Members
   // Robot frame names
-  std::string lidarFrame_;
-  std::string leftGnssFrame_;
-  std::string rightGnssFrame_;
-  std::string cabinFrame_;
+  std::string positionMeasFrame_;
+  std::string bodyFrame_;
 };
-}  // namespace excavator_se
+}  // namespace positiongraph_se
 #endif  // end AsopStaticTransforms_H

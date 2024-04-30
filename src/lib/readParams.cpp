@@ -5,11 +5,11 @@ This file is released under the "BSD-3-Clause License".
 Please see the LICENSE file that has been included as part of this package.
  */
 
-#include "excavator_holistic_graph/ExcavatorEstimator.h"
+#include "leica_position_graph/PositionEstimator.h"
 
-namespace excavator_se {
+namespace positiongraph_se {
 
-void ExcavatorEstimator::readParams_(const ros::NodeHandle& privateNode) {
+void PositionGraphEstimator::readParams_(const ros::NodeHandle& privateNode) {
   // Variables for parameter fetching
   double dParam;
   int iParam;
@@ -20,25 +20,20 @@ void ExcavatorEstimator::readParams_(const ros::NodeHandle& privateNode) {
   graph_msf::GraphMsfRos::readParams_(privateNode);
 
   // Set frames ----------------------------
-  /// Cabin frame
-  std::string frame = graph_msf::tryGetParam<std::string>("extrinsics/cabinFrame", privateNode);
-  dynamic_cast<ExcavatorStaticTransforms*>(staticTransformsPtr_.get())->setCabinFrame(frame);
-  /// Left Gnss frame
-  frame = graph_msf::tryGetParam<std::string>("extrinsics/gnssFrame1", privateNode);
-  dynamic_cast<ExcavatorStaticTransforms*>(staticTransformsPtr_.get())->setLeftGnssFrame(frame);
+  /// Body frame
+  std::string frame = graph_msf::tryGetParam<std::string>("extrinsics/BodyFrame", privateNode);
+  dynamic_cast<PositionGraphStaticTransforms*>(staticTransformsPtr_.get())->setBodyFrame(frame);
+
+  /// Position Measurment frame (Prism)
+  frame = graph_msf::tryGetParam<std::string>("extrinsics/positionMeasFrame", privateNode);
+  dynamic_cast<PositionGraphStaticTransforms*>(staticTransformsPtr_.get())->setPositionMeasFrame(frame);
+
   // Sensor Parameters ----------------------------
-  lioOdometryRate_ = graph_msf::tryGetParam<double>("sensor_params/lioOdometryRate", privateNode);
-  gnssRate_ = graph_msf::tryGetParam<double>("sensor_params/gnssRate", privateNode);
+  positionRate_ = graph_msf::tryGetParam<double>("sensor_params/positionRate", privateNode);
 
   /// Noise Parameters ----
-  /// LiDAR Odometry
-  const auto lioPoseUnaryNoise =
-      graph_msf::tryGetParam<std::vector<double>>("noise_params/lioPoseUnaryNoise", privateNode);  // roll,pitch,yaw,x,y,z
-  lioPoseUnaryNoise_ << lioPoseUnaryNoise[0], lioPoseUnaryNoise[1], lioPoseUnaryNoise[2], lioPoseUnaryNoise[3], lioPoseUnaryNoise[4],
-      lioPoseUnaryNoise[5];
-  /// Gnss
-  gnssPositionUnaryNoise_ = graph_msf::tryGetParam<double>("noise_params/gnssPositionUnaryNoise", privateNode);
-  gnssHeadingUnaryNoise_ = graph_msf::tryGetParam<double>("noise_params/gnssHeadingUnaryNoise", privateNode);
-}
+  /// Position measurement unary noise
+  positionMeasUnaryNoise_ = graph_msf::tryGetParam<double>("noise_params/PositionMeasUnaryNoise", privateNode);
+  }
 
-}  // namespace excavator_se
+}  // namespace positiongraph_se
