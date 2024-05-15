@@ -5,4 +5,4 @@ sensor_params:
 # Noise Parameters
 noise_params:
   ## Position measurement
-  PositionMeasUnaryNoise: 0.04 # x, y, z of global position
+  PositionMeasUnaryNoise: 0.001 # Asume Leica to have mm accuracy (which it does)
