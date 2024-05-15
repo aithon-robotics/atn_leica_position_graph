@@ -47,7 +47,7 @@ noise_params:
 
   ### Rotation
   #gyrNoiseDensity: 1.308e-04             # Continuous-time Noise Amplitude Spectral Density (StdDev) [rad/s/√Hz], default=sqrt(3.4906585e-07)
-  gyroNoiseDensity: 1.0e-03               # TM_ BMI088 Spec Sheet: 0.014°/s/sqrt(Hz) = 2.443e-04 rad/s/sqrt(Hz) --> (10x more) --> 2.443e-03 
+  gyrNoiseDensity: 1.0e-03               # TM_ BMI088 Spec Sheet: 0.014°/s/sqrt(Hz) = 2.443e-04 rad/s/sqrt(Hz) --> (10x more) --> 2.443e-03 
   omegaCoriolis: 1.07e-04                 # Coriolis effect, positive on northern hemisphere, 0 at the equator, default (central europe, Switzerland): 1.07e-04
 
   ### Bias (Old Values)
