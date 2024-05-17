@@ -26,7 +26,7 @@ void PositionGraphStaticTransforms::findTransformations() {
   // Print to console --------------------------
   std::cout << YELLOW_START << "StaticTransformsTf" << COLOR_END << " Looking up transforms in TF-tree." << std::endl;
   std::cout << YELLOW_START << "StaticTransformsTf" << COLOR_END << " Transforms between the following frames are required:" << std::endl;
-  std::cout << YELLOW_START << "StaticTransformsTf" << COLOR_END << " " << ", " << positionMeasFrame_ << ", " << ", " << bodyFrame_ << ", " << imuFrame_ << ", " << baseLinkFrame_ << std::endl;
+  std::cout << YELLOW_START << "StaticTransformsTf" << COLOR_END << " " << ", " << positionMeasFrame_ << ", " << bodyFrame_ << ", " << imuFrame_ << ", " << baseLinkFrame_ << std::endl;
   std::cout << YELLOW_START << "StaticTransformsTf" << COLOR_END << " Waiting for up to 100 seconds until they arrive..." << std::endl;
 
   // Temporary variable
@@ -37,33 +37,28 @@ void PositionGraphStaticTransforms::findTransformations() {
   ros::Rate rosRate(10);
   rosRate.sleep();
 
-  // Imu to Cabin Link ---
+  // Imu to Body Frame Link ---
   listener_.waitForTransform(imuFrame_, bodyFrame_, ros::Time(0), ros::Duration(100.0));
   listener_.lookupTransform(imuFrame_, bodyFrame_, ros::Time(0), transform);
-  // I_Cabin
+  // I_Body
   graph_msf::tfToIsometry3(tf::Transform(transform), lv_T_frame1_frame2(imuFrame_, bodyFrame_));
-  std::cout << YELLOW_START << "CompslamEstimator" << COLOR_END
-            << " Translation I_Cabin: " << rv_T_frame1_frame2(imuFrame_, bodyFrame_).translation() << std::endl;
-  // Cabin_I
+  std::cout << YELLOW_START << "PositionEstimator" << COLOR_END 
+            << " Translation I_Body: " << std::endl <<rv_T_frame1_frame2(imuFrame_, bodyFrame_).translation() << std::endl;
+  std::cout << YELLOW_START << "PositionEstimator" << COLOR_END
+            << " Rotation I_Body: " << std::endl << rv_T_frame1_frame2(imuFrame_, bodyFrame_).rotation() << std::endl;
+  // Body_I
   lv_T_frame1_frame2(bodyFrame_, imuFrame_) = rv_T_frame1_frame2(imuFrame_, bodyFrame_).inverse();
 
-  // Imu to Base Link ---
-  listener_.waitForTransform(imuFrame_, baseLinkFrame_, ros::Time(0), ros::Duration(1.0));
-  listener_.lookupTransform(imuFrame_, baseLinkFrame_, ros::Time(0), transform);
-  // I_Cabin
-  graph_msf::tfToIsometry3(tf::Transform(transform), lv_T_frame1_frame2(imuFrame_, baseLinkFrame_));
-  std::cout << YELLOW_START << "CompslamEstimator" << COLOR_END
-            << " Translation I_Base: " << rv_T_frame1_frame2(imuFrame_, baseLinkFrame_).translation() << std::endl;
-  // Cabin_I
-  lv_T_frame1_frame2(baseLinkFrame_, imuFrame_) = rv_T_frame1_frame2(imuFrame_, baseLinkFrame_).inverse();
-
-  // Imu to GNSS Left Link ---
+  // Imu to Prism Link ---
   listener_.waitForTransform(imuFrame_, positionMeasFrame_, ros::Time(0), ros::Duration(1.0));
   listener_.lookupTransform(imuFrame_, positionMeasFrame_, ros::Time(0), transform);
-  // I_GnssL
+
+  // I_Prism
   graph_msf::tfToIsometry3(tf::Transform(transform), lv_T_frame1_frame2(imuFrame_, positionMeasFrame_));
-  std::cout << YELLOW_START << "CompslamEstimator" << COLOR_END
-            << " Translation I_GnssL: " << rv_T_frame1_frame2(imuFrame_, positionMeasFrame_).translation() << std::endl;
+  std::cout << YELLOW_START << "PositionEstimator" << COLOR_END
+            << " Translation I_Prism: " << std::endl << rv_T_frame1_frame2(imuFrame_, positionMeasFrame_).translation() << std::endl;
+  std::cout << YELLOW_START << "PositionEstimator" << COLOR_END
+            << " Rotation I_Prism:s " << std::endl << rv_T_frame1_frame2(imuFrame_, positionMeasFrame_).rotation() << std::endl;
   // GnssL_I
   lv_T_frame1_frame2(positionMeasFrame_, imuFrame_) = rv_T_frame1_frame2(imuFrame_, positionMeasFrame_).inverse();
 
