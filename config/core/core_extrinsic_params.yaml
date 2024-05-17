@@ -1,7 +1,7 @@
 #External Prior/Transform Input
 extrinsics:
-  worldFrame: world
+  worldFrame: leica
   odomFrame: odom
   imuFrame: imu     #imu  #Frame of IMU used in integrator
-  baseLinkFrame: atnj1
-  initializeZeroYawAndPositionOfFrame: atnj1
+  baseLinkFrame: body
+  initializeZeroYawAndPositionOfFrame: imu

@@ -111,7 +111,7 @@ void PositionGraphEstimator::positionCallback_(const geometry_msgs::PointStamped
 
   // Translate to Eigen
   Eigen::Vector3d positionCoord = Eigen::Vector3d(LeicaPositionPtr->point.x, LeicaPositionPtr->point.y, LeicaPositionPtr->point.z);
-  Eigen::Vector3d positionCovarianceXYZ(0.001, 0.001, 0.001); // TODO: Set proper values
+  Eigen::Vector3d positionCovarianceXYZ(positionMeasUnaryNoise_, positionMeasUnaryNoise_, positionMeasUnaryNoise_); // TODO: Set proper values
 
   double yaw_W_C = gnssHandlerPtr_->computeYaw(positionCoord, zeroCoord);
 
@@ -133,9 +133,6 @@ void PositionGraphEstimator::positionCallback_(const geometry_msgs::PointStamped
       }
   } else {  
     // Already initialized --> add position measurement to graph
-    positionCovarianceXYZ = Eigen::Vector3d(std::max(positionCovarianceXYZ(0), positionMeasUnaryNoise_),
-                                            std::max(positionCovarianceXYZ(1), positionMeasUnaryNoise_),
-                                            std::max(positionCovarianceXYZ(2), positionMeasUnaryNoise_));
     graph_msf::UnaryMeasurementXD<Eigen::Vector3d, 3> meas_W_t_W_Position(
       "Leica-Position", int(positionRate_), LeicaPositionPtr->header.stamp.toSec(), staticTransformsPtr_->getWorldFrame() + "_ENU",
       dynamic_cast<PositionGraphStaticTransforms*>(staticTransformsPtr_.get())->getPositionMeasFrame(), positionCoord, positionCovarianceXYZ,

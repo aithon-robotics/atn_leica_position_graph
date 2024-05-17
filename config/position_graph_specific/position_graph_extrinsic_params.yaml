@@ -1,5 +1,4 @@
 #External Prior/Transform Input
 extrinsics:
-  BodyFrame: atnj1
+  BodyFrame: body
   positionMeasFrame: Prism
-  initializeZeroYawAndPositionOfFrame: atnj1
