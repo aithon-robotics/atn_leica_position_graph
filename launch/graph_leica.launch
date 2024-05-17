@@ -11,6 +11,6 @@
     <include file="$(find atn_leica_position_graph)/launch/graph_no_urdf.launch" pass_all_args="true"/>
 
     <!-- Static TF Publisher -->
-    <node pkg="tf2_ros" type="static_transform_publisher" name="atnj1_to_prism_tf_publisher" args="0.05513 -0.01502 -0.1503 0 0 0 atnj1 Prism" />
-    <node pkg="tf2_ros" type="static_transform_publisher" name="atnj1_to_imu_tf_publisher" args="0.0 0.0 0.0 1.5708 0 0 atnj1 imu" />
+    <node pkg="tf2_ros" type="static_transform_publisher" name="body_to_prism_tf_publisher" args="0.05513 -0.01502 -0.1503 0 0 0 body Prism" />
+    <node pkg="tf2_ros" type="static_transform_publisher" name="body_to_imu_tf_publisher" args="0.0 0.0 0.0 1.5708 0 0 body imu" />
 </launch>
