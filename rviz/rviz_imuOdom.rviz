@@ -166,7 +166,9 @@ Visualization Manager:
             {}
           odom:
             leica:
-              {}
+              vicon:
+                atnj1:
+                  {}
         camera_link:
           camera_fisheye1_frame:
             camera_fisheye1_optical_frame:
@@ -178,9 +180,6 @@ Visualization Manager:
           camera_pose_frame:
             camera_pose_optical_frame:
               {}
-        vicon:
-          atnj1:
-            {}
       Update Interval: 0
       Value: true
     - Angle Tolerance: 0.10000000149011612
@@ -222,7 +221,7 @@ Visualization Manager:
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: leica
+    Fixed Frame: Prism
     Frame Rate: 30
   Name: root
   Tools:
@@ -246,7 +245,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 9.681775093078613
+      Distance: 17.1134033203125
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -262,9 +261,9 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.3653983175754547
+      Pitch: 0.4247961938381195
       Target Frame: <Fixed Frame>
-      Yaw: 5.765385150909424
+      Yaw: 4.3803791999816895
     Saved:
       - Class: rviz/Orbit
         Distance: 35.76002883911133
