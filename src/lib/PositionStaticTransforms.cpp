@@ -73,7 +73,7 @@ void PositionGraphStaticTransforms::findTransformations() {
   std::cout << YELLOW_START << "PositionEstimator" << COLOR_END
             << " Translation I_Prism: " << std::endl << rv_T_frame1_frame2(imuFrame_, positionMeasFrame_).translation() << std::endl;
   std::cout << YELLOW_START << "PositionEstimator" << COLOR_END
-            << " Rotation I_Prism:s " << std::endl << rv_T_frame1_frame2(imuFrame_, positionMeasFrame_).rotation() << std::endl;
+            << " Rotation I_Prism: " << std::endl << rv_T_frame1_frame2(imuFrame_, positionMeasFrame_).rotation() << std::endl;
 
   // GnssL_I
   lv_T_frame1_frame2(positionMeasFrame_, imuFrame_) = rv_T_frame1_frame2(imuFrame_, positionMeasFrame_).inverse();
