@@ -5,4 +5,3 @@ extrinsics:
   imuFrame: imu     #imu  #Frame of IMU used in integrator
   baseLinkFrame: body
   initializeZeroYawAndPositionOfFrame: imu
-  realsenseFrame: camera

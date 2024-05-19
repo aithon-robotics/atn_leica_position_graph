@@ -6,6 +6,8 @@
     <!-- Input Topics -->
     <arg name="imu_topic_name"            default="/default/imu" />
     <arg name="position_topic_name"      default="/default/position" />
+    <arg name="realsense_topic_name"      default="/camera/odom/sample" />
+
 
     <!-- Config Files -->
     <arg name="core_graph_config_file"         default="$(find atn_leica_position_graph)/config/core/core_graph_config.yaml"/>
@@ -27,6 +29,7 @@
         <!-- Remapping of topics -->
         <remap from="/imu_topic"            to="$(arg imu_topic_name)" />
         <remap from="/position_topic"         to="$(arg position_topic_name)" />
+        <remap from="/realsense_topic"         to="$(arg realsense_topic_name)" />
     </node>
 
     <!-- RVIZ for Visualization -->
