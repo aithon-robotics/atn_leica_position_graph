@@ -21,9 +21,13 @@ class PositionGraphStaticTransforms : public graph_msf::StaticTransformsTf {
   void setPositionMeasFrame(const std::string& s) { positionMeasFrame_ = s; }
   void setBodyFrame(const std::string& s) { bodyFrame_ = s; }
 
+  void setRealsenseOdometryFrame(const std::string& s) { realsenseFrame_ = s; }
+
+
   // Getters ---------------------------------------------------------------
   const std::string& getPositionMeasFrame() { return positionMeasFrame_; }
   const std::string& getBodyFrame() { return bodyFrame_; }
+  const std::string& getRealsenseOdometryFrame() { return realsenseFrame_; }
 
  protected:  // Methods
   void findTransformations() override;
@@ -32,6 +36,7 @@ class PositionGraphStaticTransforms : public graph_msf::StaticTransformsTf {
   // Robot frame names
   std::string positionMeasFrame_;
   std::string bodyFrame_;
+  std::string realsenseFrame_;
 };
 }  // namespace positiongraph_se
 #endif  // end AsopStaticTransforms_H

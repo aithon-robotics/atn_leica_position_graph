@@ -78,13 +78,17 @@ void PositionGraphEstimator::initializePublishers_(ros::NodeHandle& privateNode)
   REGULAR_COUT << GREEN_START << " Initializing Publishers..." << COLOR_END << std::endl;
 
   // Paths
-  pubMeasWorldPositionPath_ = privateNode.advertise<nav_msgs::Path>("/graph_msf/measPositionL_path_world_prism", ROS_QUEUE_SIZE);
+  pubMeasWorldPositionPath_ = privateNode.advertise<nav_msgs::Path>("/graph_msf/measPosition_path_world_prism", ROS_QUEUE_SIZE);
+  pubMeasMapRealsensePath_ = privateNode.advertise<nav_msgs::Path>("/graph_msf/measLiDAR_path_map_imu", ROS_QUEUE_SIZE);
 }
 
 void PositionGraphEstimator::initializeSubscribers_(ros::NodeHandle& privateNode) {
 
   subPosition_ = privateNode.subscribe<geometry_msgs::PointStamped>(
     "/position_topic", ROS_QUEUE_SIZE,  &PositionGraphEstimator::positionCallback_, this, ros::TransportHints().tcpNoDelay());
+
+  subRealsense_ = privateNode.subscribe<nav_msgs::Odometry>(
+    "/realsense_topic", ROS_QUEUE_SIZE,  &PositionGraphEstimator::realsenseOdometryCallback_, this, ros::TransportHints().tcpNoDelay());
 
   std::cout << YELLOW_START << "FactorGraphFiltering" << COLOR_END << " Initialized Position subscriber (on position_topic)." << std::endl;
   return;
@@ -98,6 +102,7 @@ void PositionGraphEstimator::initializeMessages_(ros::NodeHandle& privateNode) {
 
   // Paths
   measPosition_worldPositionPathPtr_ = nav_msgs::PathPtr(new nav_msgs::Path);
+  measRealsense_mapImuPathPtr_ = nav_msgs::PathPtr(new nav_msgs::Path);  // Preintegrated Estimate of LiDAR Frame
 }
 
 
@@ -152,6 +157,49 @@ void PositionGraphEstimator::positionCallback_(const geometry_msgs::PointStamped
   addToPathMsg(measPosition_worldPositionPathPtr_, staticTransformsPtr_->getWorldFrame(), LeicaPositionPtr->header.stamp, positionCoord,
                graphConfigPtr_->imuBufferLength * 4);
   pubMeasWorldPositionPath_.publish(measPosition_worldPositionPathPtr_);
+}
+
+//---------------------------------------------------------------
+void PositionGraphEstimator::realsenseOdometryCallback_(const nav_msgs::Odometry::ConstPtr& odomRealsensePtr) {
+  
+  // Counter
+  ++realsenseOdometryCallbackCounter_;
+
+  Eigen::Isometry3d lio_T_M_Lk;
+  graph_msf::odomMsgToEigen(*odomRealsensePtr, lio_T_M_Lk.matrix());
+
+  // Transform to IMU frame
+  double RealsenseOdometryTimeK = odomRealsensePtr->header.stamp.toSec();
+
+  int realsenseOdometryRateFactor = 5;  // 200 Hz -> 40 Hz
+  int realSenseOdometryRate = 200/realsenseOdometryRateFactor;
+
+  if (realsenseOdometryCallbackCounter_ <= (realsenseOdometryRateFactor-1)) { // only every 5th message is used 200Hz -> 40Hz
+    return;
+  } else if (areYawAndPositionInited()) {  // Already initialized --> unary factor
+    // Measurement
+    graph_msf::UnaryMeasurementXD<Eigen::Isometry3d, 6> unary6DMeasurement(
+        "Lidar_unary_6D", int(realSenseOdometryRate), RealsenseOdometryTimeK, odomRealsensePtr->header.frame_id,
+        dynamic_cast<PositionGraphStaticTransforms*>(staticTransformsPtr_.get())->getRealsenseOdometryFrame(), lio_T_M_Lk, RealsenseOdomPoseUnaryNoise_);
+    this->addUnaryPoseMeasurement(unary6DMeasurement);
+
+    // Restart counter
+    realsenseOdometryCallbackCounter_ = 0;
+  }
+
+  // Visualization ----------------------------
+  // Add to path message
+  addToPathMsg(
+      measRealsense_mapImuPathPtr_, odomRealsensePtr->header.frame_id, odomRealsensePtr->header.stamp,
+      (lio_T_M_Lk * staticTransformsPtr_
+                        ->rv_T_frame1_frame2(dynamic_cast<PositionGraphStaticTransforms*>(staticTransformsPtr_.get())->getRealsenseOdometryFrame(),
+                                             staticTransformsPtr_->getImuFrame())
+                        .matrix())
+          .block<3, 1>(0, 3),
+      graphConfigPtr_->imuBufferLength * 4);
+
+  // Publish Path
+  pubMeasMapRealsensePath_.publish(measRealsense_mapImuPathPtr_);
 }
 
 

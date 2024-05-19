@@ -20,8 +20,12 @@ void PositionGraphEstimator::readParams_(const ros::NodeHandle& privateNode) {
   graph_msf::GraphMsfRos::readParams_(privateNode);
 
   // Set frames ----------------------------
+  /// Realsense frame
+  std::string frame = graph_msf::tryGetParam<std::string>("extrinsics/RealsenseFrame", privateNode);
+  dynamic_cast<PositionGraphStaticTransforms*>(staticTransformsPtr_.get())->setRealsenseOdometryFrame(frame);
+
   /// Body frame
-  std::string frame = graph_msf::tryGetParam<std::string>("extrinsics/BodyFrame", privateNode);
+  frame = graph_msf::tryGetParam<std::string>("extrinsics/BodyFrame", privateNode);
   dynamic_cast<PositionGraphStaticTransforms*>(staticTransformsPtr_.get())->setBodyFrame(frame);
 
   /// Position Measurment frame (Prism)
@@ -34,6 +38,12 @@ void PositionGraphEstimator::readParams_(const ros::NodeHandle& privateNode) {
   /// Noise Parameters ----
   /// Position measurement unary noise
   positionMeasUnaryNoise_ = graph_msf::tryGetParam<double>("noise_params/PositionMeasUnaryNoise", privateNode);
+
+  /// Realsense Odometry unary noise
+    const auto RealsenseOdomPoseUnaryNoise =
+      graph_msf::tryGetParam<std::vector<double>>("noise_params/lioPoseUnaryNoise", privateNode);  // roll,pitch,yaw,x,y,z
+      RealsenseOdomPoseUnaryNoise_ << RealsenseOdomPoseUnaryNoise[0], RealsenseOdomPoseUnaryNoise[1], RealsenseOdomPoseUnaryNoise[2], RealsenseOdomPoseUnaryNoise[3], RealsenseOdomPoseUnaryNoise[4],
+      RealsenseOdomPoseUnaryNoise[5];
   }
 
 }  // namespace positiongraph_se

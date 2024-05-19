@@ -5,8 +5,8 @@ This file is released under the "BSD-3-Clause License".
 Please see the LICENSE file that has been included as part of this package.
  */
 
-#ifndef EXCAVATOR_ESTIMATOR_H
-#define EXCAVATOR_ESTIMATOR_H
+#ifndef POSITION_ESTIMATOR_H
+#define POSITION_ESTIMATOR_H
 
 // std
 #include <chrono>
@@ -57,6 +57,7 @@ class PositionGraphEstimator : public graph_msf::GraphMsfRos {
 
   // Callbacks
   void positionCallback_(const geometry_msgs::PointStamped::ConstPtr& LeicaPositionPtr);
+  void realsenseOdometryCallback_(const nav_msgs::Odometry::ConstPtr& RealsenseOdometryPtr);
 
 
   // Publish State
@@ -68,14 +69,17 @@ class PositionGraphEstimator : public graph_msf::GraphMsfRos {
   // Publishers
   // Path
   ros::Publisher pubMeasWorldPositionPath_;
+  ros::Publisher pubMeasMapRealsensePath_;
 
   // Messages
   // Paths
   nav_msgs::PathPtr measPosition_worldPositionPathPtr_;
+  nav_msgs::PathPtr measRealsense_mapImuPathPtr_;
 
   // Subscribers
   ros::Subscriber subImu_;
   ros::Subscriber subPosition_;
+  ros::Subscriber subRealsense_;
   
   tf::TransformListener tfListener_;
 
@@ -91,9 +95,11 @@ class PositionGraphEstimator : public graph_msf::GraphMsfRos {
 
   // Noise
   double positionMeasUnaryNoise_ = 1.0;  // in [m]
+  Eigen::Matrix<double, 6, 1> RealsenseOdomPoseUnaryNoise_;
 
-  /// Flags
+  /// Counters
+  int realsenseOdometryCallbackCounter_ = 0;
 
 };
 }  // namespace positiongraph_se
-#endif  // end EXCAVATOR_ESTIMATOR_H
+#endif  // end POSITION_ESTIMATOR_H

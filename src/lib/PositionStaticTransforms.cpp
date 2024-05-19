@@ -49,6 +49,20 @@ void PositionGraphStaticTransforms::findTransformations() {
   // Body_I
   lv_T_frame1_frame2(bodyFrame_, imuFrame_) = rv_T_frame1_frame2(imuFrame_, bodyFrame_).inverse();
 
+  // Imu to Realsense Link ---
+  std::cout << YELLOW_START << "StaticTransformsTf" << COLOR_END << " Waiting for transform for 10 seconds." << std::endl;
+  listener_.waitForTransform(imuFrame_, realsenseFrame_, ros::Time(0), ros::Duration(1.0));
+  listener_.lookupTransform(imuFrame_, realsenseFrame_, ros::Time(0), transform);
+  // I_Lidar
+  graph_msf::tfToIsometry3(tf::Transform(transform), lv_T_frame1_frame2(imuFrame_, realsenseFrame_));
+  std::cout << YELLOW_START << "PositionEstimator" << COLOR_END
+            << " Translation I_Realsense: " << std::endl << rv_T_frame1_frame2(imuFrame_, realsenseFrame_).translation() << std::endl;
+  std::cout << YELLOW_START << "PositionEstimator" << COLOR_END
+            << " Rotation I_Realsense: " << std::endl << rv_T_frame1_frame2(imuFrame_, realsenseFrame_).rotation() << std::endl;
+  // Lidar_I
+  lv_T_frame1_frame2(realsenseFrame_, imuFrame_) = rv_T_frame1_frame2(imuFrame_, realsenseFrame_).inverse();
+
+
   // Imu to Prism Link ---
   listener_.waitForTransform(imuFrame_, positionMeasFrame_, ros::Time(0), ros::Duration(1.0));
   listener_.lookupTransform(imuFrame_, positionMeasFrame_, ros::Time(0), transform);
@@ -59,6 +73,7 @@ void PositionGraphStaticTransforms::findTransformations() {
             << " Translation I_Prism: " << std::endl << rv_T_frame1_frame2(imuFrame_, positionMeasFrame_).translation() << std::endl;
   std::cout << YELLOW_START << "PositionEstimator" << COLOR_END
             << " Rotation I_Prism:s " << std::endl << rv_T_frame1_frame2(imuFrame_, positionMeasFrame_).rotation() << std::endl;
+
   // GnssL_I
   lv_T_frame1_frame2(positionMeasFrame_, imuFrame_) = rv_T_frame1_frame2(imuFrame_, positionMeasFrame_).inverse();
 
