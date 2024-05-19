@@ -128,6 +128,8 @@ Visualization Manager:
           Value: true
         body:
           Value: true
+        camera:
+          Value: true
         camera_fisheye1_frame:
           Value: true
         camera_fisheye1_optical_frame:
@@ -162,10 +164,16 @@ Visualization Manager:
         body:
           Prism:
             {}
+          camera:
+            {}
           imu:
             {}
           odom:
             leica:
+              camera_odom_frame:
+                camera_pose_frame:
+                  camera_pose_optical_frame:
+                    {}
               vicon:
                 atnj1:
                   {}
@@ -175,10 +183,6 @@ Visualization Manager:
               {}
           camera_fisheye2_frame:
             camera_fisheye2_optical_frame:
-              {}
-        camera_odom_frame:
-          camera_pose_frame:
-            camera_pose_optical_frame:
               {}
       Update Interval: 0
       Value: true
@@ -221,7 +225,7 @@ Visualization Manager:
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: Prism
+    Fixed Frame: vicon
     Frame Rate: 30
   Name: root
   Tools:
@@ -245,7 +249,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 17.1134033203125
+      Distance: 3.6908674240112305
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
