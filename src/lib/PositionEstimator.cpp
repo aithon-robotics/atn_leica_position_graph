@@ -79,7 +79,7 @@ void PositionGraphEstimator::initializePublishers_(ros::NodeHandle& privateNode)
 
   // Paths
   pubMeasWorldPositionPath_ = privateNode.advertise<nav_msgs::Path>("/graph_msf/measPosition_path_world_prism", ROS_QUEUE_SIZE);
-  pubMeasMapRealsensePath_ = privateNode.advertise<nav_msgs::Path>("/graph_msf/measLiDAR_path_map_imu", ROS_QUEUE_SIZE);
+  pubMeasMapRealsensePath_ = privateNode.advertise<nav_msgs::Path>("/graph_msf/measRealsense_path_map_imu", ROS_QUEUE_SIZE);
 }
 
 void PositionGraphEstimator::initializeSubscribers_(ros::NodeHandle& privateNode) {
@@ -169,7 +169,8 @@ void PositionGraphEstimator::realsenseOdometryCallback_(const nav_msgs::Odometry
   graph_msf::odomMsgToEigen(*odomRealsensePtr, lio_T_M_Lk.matrix());
 
   // Transform to IMU frame
-  double RealsenseOdometryTimeK = odomRealsensePtr->header.stamp.toSec();
+  //double RealsenseOdometryTimeK = odomRealsensePtr->header.stamp.toSec();
+  double RealsenseOdometryTimeK = ros::Time::now().toSec();
 
   int realsenseOdometryRateFactor = 5;  // 200 Hz -> 40 Hz
   int realSenseOdometryRate = 200/realsenseOdometryRateFactor;
@@ -179,7 +180,7 @@ void PositionGraphEstimator::realsenseOdometryCallback_(const nav_msgs::Odometry
   } else if (areYawAndPositionInited()) {  // Already initialized --> unary factor
     // Measurement
     graph_msf::UnaryMeasurementXD<Eigen::Isometry3d, 6> unary6DMeasurement(
-        "Lidar_unary_6D", int(realSenseOdometryRate), RealsenseOdometryTimeK, odomRealsensePtr->header.frame_id,
+        "Realsense_unary_6D", int(realSenseOdometryRate), RealsenseOdometryTimeK, odomRealsensePtr->header.frame_id,
         dynamic_cast<PositionGraphStaticTransforms*>(staticTransformsPtr_.get())->getRealsenseOdometryFrame(), lio_T_M_Lk, RealsenseOdomPoseUnaryNoise_);
     this->addUnaryPoseMeasurement(unary6DMeasurement);
 
