@@ -20,7 +20,7 @@ graph_params:
   # ----------------
 
   gaussNewtonWildfireThreshold: 0.001     # Threshold for the wildfire in the Gauss-Newton optimization
-  maxOptimizationFrequency: 20.0          # Maximum optimization frequency [Hz], can be used to control computational load
+  maxOptimizationFrequency: 10.0          # Maximum optimization frequency [Hz], can be used to control computational load
   additionalOptimizationIterations: 0     #Additional iterations of graph optimizer after update with new factors
   findUnusedFactorSlots: true
   enableDetailedResults: false
