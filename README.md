@@ -33,6 +33,6 @@ rosrun atn_leica_timesync atn_leica_timesync_node
 
 | Package         | Description                     | Link                                                           |
 | --------------- | ------------------------------- | -------------------------------------------------------------- |
-| atn_leia_timesync| Timesynchronization of total station & system clock | [atn_leia_timesync](https://github.com/aithon-robotics/atn_leica_timesync)         |
+| atn_leica_timesync| Timesynchronization of total station & system clock | [atn_leica_timesync](https://github.com/aithon-robotics/atn_leica_timesync)         |
 | graph_msf        | Factor graph framework this package is based on     | [graph_msf](https://github.com/leggedrobotics/graph_msf/tree/main) |
 
