@@ -1,5 +1,5 @@
 # atn_leica_position_graph
-Thesis: "Factor graph based stat estimation for UAVs in construction environments"
+Thesis: "Factor graph based state estimation for UAVs in construction environments"
 
 # Installation
 Install [ROS noetic](https://wiki.ros.org/noetic/Installation/Ubuntu).
@@ -33,6 +33,6 @@ rosrun atn_leica_timesync atn_leica_timesync_node
 
 | Package         | Description                     | Link                                                           |
 | --------------- | ------------------------------- | -------------------------------------------------------------- |
-| atn_leia_timesync| Timesynchronization of Total Station & System Clock | [atn_leia_timesync](https://github.com/aithon-robotics/atn_leica_timesync)         |
-| graph_msf        | Factor Graph Framework this package is based on     | [graph_msf](https://github.com/leggedrobotics/graph_msf/tree/main) |
+| atn_leia_timesync| Timesynchronization of total station & system clock | [atn_leia_timesync](https://github.com/aithon-robotics/atn_leica_timesync)         |
+| graph_msf        | Factor graph framework this package is based on     | [graph_msf](https://github.com/leggedrobotics/graph_msf/tree/main) |
 
