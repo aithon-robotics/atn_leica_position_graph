@@ -14,10 +14,10 @@
 
 
     <!-- Static TF Publisher -->
-    <node pkg="tf2_ros" type="static_transform_publisher" name="body_to_prism_tf_publisher" args="0.05513 -0.01502 -0.1503 0 0 0 body Prism" />
+    <node pkg="tf2_ros" type="static_transform_publisher" name="body_to_prism_tf_publisher" args="-0.05513 0.0 -0.1763 3.14159 0 0 body Prism" />
     <node pkg="tf2_ros" type="static_transform_publisher" name="body_to_imu_tf_publisher" args="0.0 0.0 0.0 1.5708 0 0 body imu" />
     <!-- Realsense Publisher TF to right camera: (Origin_Vicon to RealsenseT265:    [136.3mm, -38.7mm, -58.3mm]), Pose Frame is 32mm away from opitcal center, Realsense Pose Frame is 90° rotated and Camera is looking 30° downward -->
-    <node pkg="tf2_ros" type="static_transform_publisher" name="body_to_realsense_tf_publisher" args="0.1363 -0.0067 -0.0583 0 0.523599 0 body camera" />
+    <node pkg="tf2_ros" type="static_transform_publisher" name="body_to_realsense_tf_publisher" args="0.1545 -0.0067 -0.044 0 0.523599 0 body camera" />
 
 
     <!-- Vicon Reference TF Publisher -->
