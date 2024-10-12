@@ -156,7 +156,7 @@ void PositionGraphEstimator::positionCallback_(const geometry_msgs::PointStamped
   // Visualizations
   addToPathMsg(measPosition_worldPositionPathPtr_, staticTransformsPtr_->getWorldFrame(), LeicaPositionPtr->header.stamp, positionCoord,
                graphConfigPtr_->imuBufferLength * 4);
-  pubMeasWorldPositionPath_.publish(measPosition_worldPositionPathPtr_);
+  // pubMeasWorldPositionPath_.publish(measPosition_worldPositionPathPtr_);
 }
 
 //---------------------------------------------------------------
@@ -200,7 +200,7 @@ void PositionGraphEstimator::realsenseOdometryCallback_(const nav_msgs::Odometry
       graphConfigPtr_->imuBufferLength * 4);
 
   // Publish Path
-  pubMeasMapRealsensePath_.publish(measRealsense_mapImuPathPtr_);
+  // pubMeasMapRealsensePath_.publish(measRealsense_mapImuPathPtr_);
 }
 
 
