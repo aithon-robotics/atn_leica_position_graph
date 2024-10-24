@@ -172,7 +172,7 @@ void PositionGraphEstimator::realsenseOdometryCallback_(const nav_msgs::Odometry
   //double RealsenseOdometryTimeK = odomRealsensePtr->header.stamp.toSec();
   double RealsenseOdometryTimeK = ros::Time::now().toSec();
 
-  int realsenseOdometryRateFactor = 5;  // 200 Hz -> 40 Hz
+  int realsenseOdometryRateFactor = 20;  // 200 Hz -> 10 Hz
   int realSenseOdometryRate = 200/realsenseOdometryRateFactor;
 
   if (realsenseOdometryCallbackCounter_ <= (realsenseOdometryRateFactor-1)) { // only every 5th message is used 200Hz -> 40Hz
