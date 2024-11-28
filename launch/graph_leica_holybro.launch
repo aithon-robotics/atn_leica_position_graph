@@ -6,15 +6,21 @@
     <!-- Input Topics -->
     <arg name="imu_topic_name"            default="/atnj1/imu/data_raw" />
     <arg name="position_topic_name"      default="/leica/position/rostime" />
+    <!-- <remap from="/gt_box/ap20/tps" to="/leica/position" />
+    <remap from="/gt_box/ap20/imu" to="/atnj1/imu/data_raw" /> -->
 
     <!-- Graph -->
     <include file="$(find atn_leica_position_graph)/launch/graph_no_urdf.launch" pass_all_args="true"/>
+
+    <!-- <node pkg="rosservice" type="rosservice" name="/gt_box/ap20/enable_streaming" args="call /gt_box/ap20/enable_streaming '{data: true}'"/> -->
 
     <node pkg="atn_leica_timesync" type="atn_leica_timesync_node" name="timesync_node" output="screen" /> <!-- launch-prefix="gdb -args"-->
 
 
     <!-- Static TF Publisher -->
     <node pkg="tf2_ros" type="static_transform_publisher" name="body_to_prism_tf_publisher" args="-0.0552 0.0036 -0.1763 3.14159 0.0 0.0 body Prism" />
+    <!-- new ap20: -->
+    <!-- <node pkg="tf2_ros" type="static_transform_publisher" name="body_to_prism_tf_publisher" args="-0.04756 0.01105 -0.1763 3.14159 0.0 0.0 body Prism" /> -->
     <node pkg="tf2_ros" type="static_transform_publisher" name="body_to_imu_tf_publisher" args="-0.0051 0.0 0.0035 -1.5708 0.0 0.0 body imu" />
     <!-- Realsense Publisher TF to right camera: (Origin_Vicon to RealsenseT265:    [136.3mm, -38.7mm, -58.3mm]), Pose Frame is 32mm away from opitcal center, Realsense Pose Frame is 90° rotated and Camera is looking 30° downward -->
     <node pkg="tf2_ros" type="static_transform_publisher" name="body_to_realsense_tf_publisher" args="0.1544 0.0 -0.0692 0.0 0.523599 0.0 body camera" />
