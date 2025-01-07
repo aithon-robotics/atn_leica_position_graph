@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <launch>
     <!-- Parameters -->
-    <param name="use_sim_time"            value="true"/>
+    <param name="use_sim_time"            value="false"/>
 
     <!-- Input Topics -->
     <arg name="imu_topic_name"            default="/atnj1/imu/data_raw" />
@@ -18,5 +18,5 @@
 
 
     <!-- Vicon Reference TF Publisher -->
-    <node pkg="tf2_ros" type="static_transform_publisher" name="leica_to_vicon_tf_publisher" args="-5.77765865 6.97464564 0.511816497 0.00280794 -0.00455179 0.99378397 -0.11119724 leica vicon"/>
+    <!-- <node pkg="tf2_ros" type="static_transform_publisher" name="leica_to_vicon_tf_publisher" args="-5.77765865 6.97464564 0.511816497 0.00280794 -0.00455179 0.99378397 -0.11119724 leica vicon"/> -->
 </launch>
